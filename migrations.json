@@ -1,0 +1,14 @@
+{
+    "prerun": "# some code here",
+    "directory": "migrations",
+    "history": "migratehistory",
+    "models": [
+        "apps.users.models.TGUser",
+        "apps.notifications.models.Notification",
+        "apps.notifications.models.UsersNotifications",
+        "apps.payments.models.Payment",
+        "apps.payments.models.RBDetails",
+        "apps.channels.models.Channel",
+        "apps.users.models.StartMessage"
+    ]
+}

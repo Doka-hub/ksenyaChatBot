@@ -1,0 +1,5 @@
+[flake8]
+ignore = E712 E711 C901
+extend-exclude = .venv/,.pytest_cache/,**/migrations/,**/snapshots/, migrations/
+max-complexity = 10
+max-line-length=100

@@ -1,0 +1,36 @@
+[tool.poetry]
+name = "ksenyaChatBot"
+version = "0.1.0"
+description = ""
+authors = ["Dair Sheishenaliev <dokadair@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+loguru = "^0.7.0"
+python-decouple = "^3.8"
+python-dotenv = "^1.0.0"
+cryptography = "^43.0.1"
+cachetools = "^5.3.0"
+peewee-migrations = "^0.3.32"
+redis = "^5.0.0"
+flake8 = "^7.0.0"
+celery = "^5.2.7"
+gunicorn = "^23.0.0"
+psycopg2 = "^2.9.6"
+aiopg = "^1.4.0"
+pytz = "^2024.2"
+aiogram = "^3.12.0"
+pydantic-settings = "^2.4.0"
+stripe = "^10.9.0"
+pydeps = "^1.12.20"
+peewee = "^3.17.6"
+peewee-async = "^0.12.1"
+
+
+[tool.poetry.group.dev.dependencies]
+aiomysql = "^0.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

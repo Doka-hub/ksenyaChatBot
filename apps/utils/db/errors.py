@@ -1,0 +1,4 @@
+
+
+class CRUDValidationError(BaseException):
+    pass
