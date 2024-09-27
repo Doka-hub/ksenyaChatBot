@@ -35,7 +35,6 @@ class CRUDBase(metaclass=ABCMeta):
 
     fields: List[str] = []
     read_only_fields: List[str] = []
-    exclude_not_active: bool = True
 
     # UTILS
     @classmethod
@@ -54,15 +53,9 @@ class CRUDBase(metaclass=ABCMeta):
     # BASE CRUD
     @classmethod
     async def list(cls, *query_filters) -> List[Model]:
-        is_active = hasattr(cls.model, 'is_active')
         fields = cls.get_query_fields()
-        if is_active and cls.exclude_not_active:
-            filter_query = cls.model.select(*fields).filter(cls.model.is_active == True)
-        else:
-            filter_query = cls.model.select(*fields)
-
-        filter_query = filter_query.filter(*query_filters)
-
+        queryset = cls.model.select(*fields)
+        filter_query = queryset.filter(*query_filters)
         return await filter_query.aio_execute()
 
     @classmethod

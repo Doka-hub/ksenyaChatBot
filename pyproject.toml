@@ -26,6 +26,9 @@ stripe = "^10.9.0"
 pydeps = "^1.12.20"
 peewee = "^3.17.6"
 peewee-async = "^0.12.1"
+pandas = "^2.2.3"
+openpyxl = "^3.1.5"
+xlsxwriter = "^3.2.0"
 
 
 [tool.poetry.group.dev.dependencies]

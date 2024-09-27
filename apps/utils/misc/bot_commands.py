@@ -1,18 +1,21 @@
 from aiogram import Bot
+
 from aiogram.types import BotCommand
+
+StartCommand = BotCommand(command='start', description='Запустить бота')
+DownloadExcelCommand = BotCommand(command='excel', description='Скачать excel')
 
 
 async def set_bot_commands(bot: Bot):
     commands = [
-        BotCommand(command='start', description='Запустить бота'),
+        StartCommand
     ]
     await bot.set_my_commands(commands=commands)
 
 
 async def set_manager_bot_commands(bot: Bot):
     commands = [
-        BotCommand(command='start', description='Запустить бота'),
-        BotCommand(command='payments', description='Скачать платежи (excel)'),
+        StartCommand,
+        DownloadExcelCommand,
     ]
     await bot.set_my_commands(commands=commands)
-

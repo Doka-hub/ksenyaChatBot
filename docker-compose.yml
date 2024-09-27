@@ -1,7 +1,5 @@
 version: "3.8"
-name: tg-ksenya-chat-bot
 services:
-
   db:
     container_name: db
     build:
@@ -38,35 +36,35 @@ services:
         limits:
           memory: 2G
 
-#  nginx:
-#    image: nginx:1.24-alpine
-#    restart: unless-stopped
-#    ports:
-#      - 80:80
-#      - 443:443
-#    volumes:
-#      - ./.nginx/http.conf:/etc/nginx/conf.d/default.conf:ro
-#      - ./.nginx/ssl-dhparam.pem:/etc/nginx/ssl-dhparam.pem:ro
-#      - certs:/etc/nginx/ssl:ro
-#      - certbot-www:/var/www/certbot:ro
-#      - media-files:/var/www/media:ro
-#      - static-files:/var/www/static:ro
-#      - bot-static-files:/home/app/static:ro
-#    deploy:
-#      resources:
-#        limits:
-#          memory: 256M
-##
-#  certbot:
-#    image: certbot/certbot:v2.6.0
-#    volumes:
-#      - certs:/etc/letsencrypt
-#      - certbot-www:/var/lib/letsencrypt
-#    command: renew
-#    deploy:
-#      resources:
-#        limits:
-#          memory: 256M
+  nginx:
+    image: nginx:1.24-alpine
+    restart: unless-stopped
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./.nginx/http.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./.nginx/ssl-dhparam.pem:/etc/nginx/ssl-dhparam.pem:ro
+      - certs:/etc/nginx/ssl:ro
+      - certbot-www:/var/www/certbot:ro
+      - media-files:/var/www/media:ro
+      - static-files:/var/www/static:ro
+      - bot-static-files:/home/app/static:ro
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+#
+  certbot:
+    image: certbot/certbot:v2.6.0
+    volumes:
+      - certs:/etc/letsencrypt
+      - certbot-www:/var/lib/letsencrypt
+    command: renew
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   redis:
     image: redis:alpine

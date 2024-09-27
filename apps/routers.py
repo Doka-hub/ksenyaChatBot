@@ -1,15 +1,8 @@
 from aiogram import F, Router
-from aiogram.filters import CommandStart
+from aiogram.filters import CommandStart, Command
 from aiogram.types import ContentType
 
-from apps.payments.callbacks import PaymentCallbackData, PaymentApproveCallbackData
-from apps.users.filters import UserIsActive
-from apps.users.keyboards.texts import TO_MENU
-from apps.utils.routers import (
-    callback_query_register,
-    message_register,
-    chat_join_request_register,
-)
+from .handlers.admins import DownloadExcelHandler
 from .handlers.channels import ChannelRequestHandler
 from .handlers.payments import (
     ChoosePaymentHandler,
@@ -18,7 +11,16 @@ from .handlers.payments import (
     ScreenshotHandler,
 )
 from .handlers.start import StartHandler
+from .payments.callbacks import PaymentCallbackData, PaymentApproveCallbackData
 from .payments.states import ChoosePaymentState, PaymentApproveState
+from .users.filters import UserIsActive, UserIsManager
+from .users.keyboards.texts import TO_MENU
+from .utils.routers import (
+    callback_query_register,
+    message_register,
+    chat_join_request_register,
+)
+from .utils.misc.bot_commands import DownloadExcelCommand
 
 router = Router()
 
@@ -45,6 +47,8 @@ message_register(
     F.content_type.is_(ContentType.PHOTO),
     states=[PaymentApproveState.screenshot],
 )
+
+message_register(router, DownloadExcelHandler, UserIsManager(False), Command(DownloadExcelCommand))
 
 # channel join
 chat_join_request_register(router, ChannelRequestHandler)
