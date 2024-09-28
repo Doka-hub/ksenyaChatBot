@@ -13,7 +13,7 @@ class Role(Enum):
 class TGUser(BaseModel):
     user_id = peewee.CharField(max_length=255)
     username = peewee.CharField(max_length=255, null=True)
-    role = peewee.CharField(max_length=255, choices=Role, default='client')
+    role = peewee.CharField(max_length=255, choices=Role, default=Role.client)
 
     first_name = peewee.CharField(max_length=255, null=True)
     last_name = peewee.CharField(max_length=255, null=True)
