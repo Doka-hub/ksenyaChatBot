@@ -23,7 +23,7 @@ async def notify_managers(payment_id: int):
 
 
 @celery_app.task()
-async def task_notify_managers(payment_id: int):
+def task_notify_managers(payment_id: int):
     async_to_sync(notify_managers)(payment_id)
 
 
