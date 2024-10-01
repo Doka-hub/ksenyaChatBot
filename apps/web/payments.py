@@ -30,7 +30,7 @@ async def stripe_handle(request: web.Request):
 
     # mark payment paid and notify user, send invite link to join to the channel
     await PaymentCRUD.update(payment, is_paid=True, paid_at=datetime.now())
-    await task_payment_paid(payment.id)
+    task_payment_paid.delay(payment.id)
 
     return json_response()
 
@@ -52,7 +52,7 @@ async def stripe_payment_unpaid(request: web.Request):
     payment = await PaymentCRUD.get(stripe_id=stripe_id, type=PaymentType.EU)
 
     # notify user to make payment
-    await task_payment_unpaid(payment.user.user_id)
+    task_payment_unpaid.delay(payment.user.user_id)
 
     return json_response()
 
@@ -74,7 +74,7 @@ async def rb_payment_paid(request: web.Request):
         status_code = 200
 
         # same as line 26
-        await task_payment_paid(payment_id)
+        task_payment_paid.delay(payment_id)
     else:
         response = {'status': 'payment_unverified'}
         status_code = 401

@@ -135,4 +135,4 @@ class ScreenshotHandler(MessageHandler):
         )
         await self.state.clear()
 
-        await task_notify_managers(payment_id)
+        task_notify_managers.delay(payment_id)
