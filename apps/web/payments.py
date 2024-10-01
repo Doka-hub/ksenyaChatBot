@@ -7,6 +7,7 @@ from apps.notifications.tasks import task_payment_paid, task_payment_unpaid
 from apps.payments.crud import PaymentCRUD
 from apps.payments.models import PaymentType
 from apps.utils import stripe
+from main.loader import settings
 
 payment_app = web.Application()
 
@@ -17,7 +18,11 @@ async def stripe_handle(request: web.Request):
     sig_header = str(request.headers['Stripe-Signature'])
 
     # validate request and get event data
-    event = stripe.get_webhook_construct_event(payload, sig_header)
+    event = stripe.get_webhook_construct_event(
+        payload,
+        sig_header,
+        settings.STRIPE_CHECKOUT_COMPLETED_WEBHOOK_SECRET_KEY,
+    )
 
     # looking for payment in db
     stripe_id = event.data.object.id
@@ -36,7 +41,11 @@ async def stripe_payment_unpaid(request: web.Request):
     sig_header = str(request.headers['Stripe-Signature'])
 
     # validate request and get event data
-    event = stripe.get_webhook_construct_event(payload, sig_header)
+    event = stripe.get_webhook_construct_event(
+        payload,
+        sig_header,
+        settings.STRIPE_CHECKOUT_EXPIRED_WEBHOOK_SECRET_KEY,
+    )
 
     # looking for payment in db
     stripe_id = event.data.object.id
