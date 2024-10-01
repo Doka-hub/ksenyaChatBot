@@ -71,7 +71,7 @@ async def payment_unpaid_notify(user_id: int):
 
 @celery_app.task()
 def task_payment_unpaid_notify(user_id: int):
-    celery_event_loop.run_until_complete((payment_unpaid_notify(user_id))
+    celery_event_loop.run_until_complete(payment_unpaid_notify(user_id))
 
 
 async def update_subscription_notify(payment_id: int):
