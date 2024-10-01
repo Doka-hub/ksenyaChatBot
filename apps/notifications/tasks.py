@@ -6,12 +6,12 @@ from apps.payments.crud import PaymentCRUD
 from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
 from apps.payments.models import Subscription
 from apps.users.models import Role, TGUser
-from main.huey_config import huey
-
+#from main.huey_config import huey
+from huey.contrib.djhuey import task
 from .utils import send_message
 
 
-@huey.task()
+@task()
 async def notify_managers(payment_id: int):
     payment = await PaymentCRUD.get_by_id(payment_id)
     managers = await TGUser.filter(TGUser.role == Role.manager.value).aio_execute()
@@ -22,7 +22,7 @@ async def notify_managers(payment_id: int):
         )
 
 
-@huey.task()
+@task()
 async def payment_paid_notify(payment_id: int):
     payment = await PaymentCRUD.get_by_id(payment_id)
     channel = await ChannelCRUD.get_first()
@@ -54,7 +54,7 @@ async def payment_paid_notify(payment_id: int):
     )
 
 
-@huey.task()
+@task()
 async def payment_unpaid_notify(user_id: int):
     await send_message(
         user_id,
@@ -63,7 +63,7 @@ async def payment_unpaid_notify(user_id: int):
     )
 
 
-@huey.task()
+@task()
 async def update_subscription_notify(payment_id: int):
     payment = await PaymentCRUD.get_by_id(payment_id)
     user_id = payment.user.user_id

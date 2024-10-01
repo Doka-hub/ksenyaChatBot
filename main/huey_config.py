@@ -3,5 +3,7 @@ from huey import RedisHuey
 from .loader import settings
 
 # Инициализация Huey с Redis в качестве брокера
-huey = RedisHuey(host=settings.REDIS_HOST, port=settings.REDIS_PORT)
+huey = RedisHuey(url=settings.REDIS_URL)
 
+
+from apps.notifications.tasks import *

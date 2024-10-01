@@ -70,9 +70,12 @@ services:
   huey:
     build: .
     container_name: huey_worker
+    env_file:
+      - .env
     depends_on:
       - redis
-    command: huey_consumer.py huey_config.huey
+      - backend
+    entrypoint: huey_consumer.py main.huey_config.huey
 
 volumes:
   postgres-data:
