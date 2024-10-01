@@ -1,5 +1,5 @@
 from apps.channels.crud import ChannelCRUD
-from apps.channels.keyboards.inline import get_channel_link_inline_keyboard
+from apps.channels.keyboards.inline import get_join_request_link_inline_keyboard
 from apps.payments.crud import PaymentCRUD
 from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
 from apps.users.models import Role, TGUser
@@ -27,7 +27,7 @@ async def task_payment_paid(payment_id: int):
     await send_message(
         payment.user.user_id,
         message=f'Ваш заказ был оплачен! \nВот ваша ссылка для вступления - {channel.url}',
-        reply_markup=get_channel_link_inline_keyboard(channel.url),
+        reply_markup=get_join_request_link_inline_keyboard(channel.url),
     )
 
 
