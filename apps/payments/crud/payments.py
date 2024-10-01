@@ -35,7 +35,6 @@ class PaymentCRUD(CRUDBase):
         'screenshot',
 
         'paid_at',
-        'active_by',
 
         'is_paid',
     ]
