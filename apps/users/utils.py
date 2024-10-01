@@ -1,12 +1,14 @@
 import re
 from datetime import datetime, timedelta
 
+from apps.channels.crud import ChannelCRUD
 from apps.payments.models import Payment
 from .models import TGUser
 
 
 async def get_user_payments(user: TGUser):
-    paid_date = datetime.now() - timedelta(days=30)
+    channel = await ChannelCRUD.get_first()
+    paid_date = datetime.now() - timedelta(days=channel.days)
     user_payments = await Payment.filter(
         Payment.is_paid == True,
         Payment.paid_at >= paid_date,
