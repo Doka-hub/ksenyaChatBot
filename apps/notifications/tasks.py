@@ -51,7 +51,7 @@ async def payment_paid_notify(payment_id: int):
         message=f'Ваш заказ был оплачен! \nВот ваша ссылка для вступления - {channel.url}',
         reply_markup=get_join_request_link_inline_keyboard(channel.url),
     )
-    task_update_subscription_notify.apply_async((payment.id,), eta=active_by - timedelta(days=5))
+    task_update_subscription_notify.apply_async((payment.id,), eta=active_by - timedelta(seconds=5))
 
 
 @celery_app.task()

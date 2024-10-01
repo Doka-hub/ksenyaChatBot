@@ -46,7 +46,7 @@ class Subscription(BaseModel):
     channel = peewee.ForeignKeyField(
         Channel,
         backref='subscriptions',
-        on_delete='SET_NULL',
+        on_delete='SET NULL',
         null=True,
     )
 

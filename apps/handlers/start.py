@@ -26,6 +26,7 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
                 reply_markup=get_manager_menu_inline_keyboard(),
             )
             return
+
         user_payments = await get_user_payments(self.user)
 
         if len(user_payments) >= 1:
