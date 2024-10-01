@@ -30,7 +30,7 @@ def create_checkout_session(
             }
         ],
         mode='payment',
-        success_url='https://google.com',
+        success_url='https://t.me/web_app_testBot',
         metadata=metadata,
         customer_email=kwargs.get('email'),
     )

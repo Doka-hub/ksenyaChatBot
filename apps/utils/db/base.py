@@ -61,6 +61,7 @@ class CRUDBase(metaclass=ABCMeta):
     @classmethod
     @check_fields()
     async def get(cls, **fields) -> Model:
+        print(fields)
         filter_fields = ((cls.get_model_field_condition(field, fields[field]),) for field in fields)
         query = cls.model.select(*cls.get_query_fields()).where(*filter_fields)
         return await query.aio_get()
@@ -84,14 +85,14 @@ class CRUDBase(metaclass=ABCMeta):
             instance_list = instance
 
         for instance in instance_list:
-            data = {}
+            data = {}            
             if isinstance(instance, int):
                 instance = cls.model.aio_get(cls.model.id == instance)
-
+#            data = {'id': instance.id}
             for field, value in fields.items():
                 data[field] = value
 
-            await instance.update(data).aio_execute()
+            await cls.model.update(data).aio_execute()
 
     # SPECIFIC CRUD
     @classmethod

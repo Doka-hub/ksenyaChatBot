@@ -58,7 +58,7 @@ async def rb_payment_paid(request: web.Request):
     data = await request.json()
 
     payment_id = data.get('payment_id')
-    payment = await PaymentCRUD.get(id=payment_id, type=PaymentType.EU)
+    payment = await PaymentCRUD.get(id=payment_id)
 
     if payment:
         response = {'status': 'payment_verified'}

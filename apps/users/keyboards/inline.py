@@ -8,8 +8,8 @@ def get_manager_menu_inline_keyboard() -> InlineKeyboardMarkup:
         [
             [
                 InlineKeyboardButton(
-                    text='Оплачено!',
-                    url='http://localhost:8001/admin/'
+                    text='Админка',
+                    url='https://bot.chertovich.com/admin/'
                 ),
             ],
         ],

@@ -65,6 +65,8 @@ class EmailHandler(MessageHandler):
 
         email = self.event.text
         if is_valid_email(email):
+            message  = await self.event.answer('Обрабатываем...', reply_markup=ReplyKeyboardRemove())
+            message.delete()
             await TGUserCRUD.update(self.user, email=self.event.text)
 
             state_data = await self.state.get_data()
@@ -74,6 +76,7 @@ class EmailHandler(MessageHandler):
 
             if payment_url:
                 message = f'''Вот ваша ссылка на оплату: {payment_url}'''
+                reply_markup = None
             else:
                 rb_details = await RBDetailsCRUD.get_first()
                 message = rb_payment_details_text.format(
@@ -81,11 +84,10 @@ class EmailHandler(MessageHandler):
                     field_1=rb_details.field_1,
                     field_2=rb_details.field_2,
                 )
+                reply_markup = get_approve_payment_inline_keyboard()
+                await self.state.set_state(PaymentApproveState.paid)
 
             await self.state.update_data(payment_id=payment.id)
-            await self.state.set_state(PaymentApproveState.paid)
-
-            reply_markup = ReplyKeyboardRemove()
         else:
             reply_markup = None
             message = 'Введите правильную почту'
@@ -98,7 +100,7 @@ class PaymentApproveHandler(CallbackQueryHandler):
 
     async def handle(self) -> Any:
         await self.event.message.answer(
-            'Мы почти закончили! Отправьте пожалуйста скриншот перевода, чтобы мы могли подтвердить ваш платеж!'
+            'Мы почти закончили! Отправьте пожалуйста скриншот перевода, чтобы мы могли подтвердить ваш платеж!',
         )
         await self.state.set_state(PaymentApproveState.screenshot)
 
@@ -124,7 +126,7 @@ class ScreenshotHandler(MessageHandler):
         )
         async with ClientSession() as session:
             await session.post(
-                f'http://localhost:8001/payments/{payment_id}/upload-screenshot/',
+                f'http://admin:8001/payments/{payment_id}/upload-screenshot/',
                 data=data,
             )
 
