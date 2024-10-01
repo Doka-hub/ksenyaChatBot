@@ -1,10 +1,10 @@
 from io import BytesIO
-from pathlib import Path
 from typing import Any
 
 from aiogram.types import ReplyKeyboardRemove
 from aiohttp import ClientSession, FormData
 
+from apps.notifications.tasks import notify_managers
 from apps.payments.callbacks import PaymentCallbackData, PaymentApproveCallbackData
 from apps.payments.crud import RBDetailsCRUD
 from apps.payments.keyboards.inline import get_approve_payment_inline_keyboard
@@ -15,7 +15,6 @@ from apps.users.crud import TGUserCRUD
 from apps.users.utils import is_valid_email
 from apps.utils.handlers import MessageHandler, CallbackQueryHandler
 from apps.utils.keyboards.default import get_back_keyboard
-from apps.notifications.tasks import notify_managers
 from .start import StartHandler
 
 
@@ -65,7 +64,7 @@ class EmailHandler(MessageHandler):
 
         email = self.event.text
         if is_valid_email(email):
-            message  = await self.event.answer('Обрабатываем...', reply_markup=ReplyKeyboardRemove())
+            message = await self.event.answer('Обрабатываем...', reply_markup=ReplyKeyboardRemove())
             message.delete()
             await TGUserCRUD.update(self.user, email=self.event.text)
 

@@ -13,6 +13,8 @@ services:
       - db.env
     environment:
       - PGDATA=/var/lib/postgresql/data/pgdata
+#    networks:
+#      - tg-ksenya-chat-bot
     deploy:
       resources:
         limits:
@@ -28,6 +30,15 @@ services:
       - .env
     ports:
       - "8000:8000"
+#    volumes:
+#      - media-files:/home/app/media
+#      - static-files:/home/app/static
+#    networks:
+#      - tg-ksenya-chat-bot
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 2G
 
   nginx:
     image: nginx:1.24-alpine
@@ -42,11 +53,13 @@ services:
       - certbot-www:/var/www/certbot:ro
       - admin_media-files:/home/app/media
       - admin_static-files:/home/app/static
+#    networks:
+#      - tg-ksenya-chat-bot
     deploy:
       resources:
         limits:
           memory: 256M
-
+#
   certbot:
     image: certbot/certbot:v2.6.0
     volumes:

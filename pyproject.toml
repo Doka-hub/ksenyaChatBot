@@ -35,6 +35,7 @@ huey = "^2.5.2"
 
 [tool.poetry.group.dev.dependencies]
 aiomysql = "^0.2.0"
+ipython = "^8.27.0"
 
 [build-system]
 requires = ["poetry-core"]
