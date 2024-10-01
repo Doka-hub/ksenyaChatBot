@@ -2,7 +2,6 @@ import importlib
 import json
 from typing import Any
 
-import peewee
 from peewee_async.aio_model import AioModel
 
 from main.db import database

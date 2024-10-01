@@ -40,9 +40,7 @@ def create_checkout_session(
 def get_webhook_construct_event(
     payload: dict,
     sig_header: str,
-    endpoint_secret_key: str = (
-            settings.STRIPE_CHECKOUT_SESSION_WEBHOOK_SECRET_KEY
-    ),
+    endpoint_secret_key: str,
 ):
     try:
         event = _stripe.Webhook.construct_event(
