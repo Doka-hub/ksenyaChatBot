@@ -240,23 +240,6 @@ files = [
 ]
 
 [[package]]
-name = "asgiref"
-version = "3.8.1"
-description = "ASGI specs, helper code, and adapters"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "asgiref-3.8.1-py3-none-any.whl", hash = "sha256:3e1e3ecc849832fe52ccf2cb6686b7a55f82bb1d6aee72a58826471390335e47"},
-    {file = "asgiref-3.8.1.tar.gz", hash = "sha256:c343bd80a0bec947a9860adb4c432ffa7db769836c64238fc34bdc3fec84d590"},
-]
-
-[package.dependencies]
-typing-extensions = {version = ">=4", markers = "python_version < \"3.11\""}
-
-[package.extras]
-tests = ["mypy (>=0.800)", "pytest", "pytest-asyncio"]
-
-[[package]]
 name = "asttokens"
 version = "2.4.1"
 description = "Annotate AST trees with source code positions"
@@ -866,20 +849,6 @@ gevent = ["gevent (>=1.4.0)"]
 setproctitle = ["setproctitle"]
 testing = ["coverage", "eventlet", "gevent", "pytest", "pytest-cov"]
 tornado = ["tornado (>=0.2)"]
-
-[[package]]
-name = "huey"
-version = "2.5.2"
-description = "huey, a little task queue"
-optional = false
-python-versions = "*"
-files = [
-    {file = "huey-2.5.2.tar.gz", hash = "sha256:df33db474c05414ed40ee2110e9df692369871734da22d74ffb035a4bd74047f"},
-]
-
-[package.extras]
-backends = ["redis (>=3.0.0)"]
-redis = ["redis (>=3.0.0)"]
 
 [[package]]
 name = "idna"
@@ -2114,4 +2083,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "679e90aa25580ea17bd3a0cb38d6af97d850397d60542796d2fbd5f2845e427f"
+content-hash = "de77f957c5ed0625b5cfea171436ac7336ed4979bd4e230f18ca578f399c44bf"

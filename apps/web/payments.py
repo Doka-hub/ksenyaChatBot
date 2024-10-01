@@ -4,8 +4,7 @@ from aiohttp.web_response import json_response
 from apps.payments.crud import PaymentCRUD
 from apps.payments.models import PaymentType
 from apps.utils import stripe
-# from apps.notifications.tasks import payment_paid_notify, payment_unpaid_notify
-from main.huey_config import payment_paid_notify, payment_unpaid_notify
+from apps.notifications.tasks import task_payment_paid_notify, task_payment_unpaid_notify
 from main.loader import settings
 
 payment_app = web.Application()
@@ -28,7 +27,7 @@ async def stripe_handle(request: web.Request):
     payment = await PaymentCRUD.get_by_field('stripe_id', stripe_id)
 
     # mark payment paid and notify user, send invite link to join to the channel
-    payment_paid_notify(payment.id)
+    task_payment_paid_notify.delay(payment.id)
 
     return json_response()
 
@@ -50,7 +49,7 @@ async def stripe_payment_unpaid(request: web.Request):
     payment = await PaymentCRUD.get(stripe_id=stripe_id, type=PaymentType.EU)
 
     # notify user to make payment
-    payment_unpaid_notify(payment.user.user_id)
+    task_payment_unpaid_notify(payment.user.user_id)
 
     return json_response()
 
@@ -72,7 +71,7 @@ async def rb_payment_paid(request: web.Request):
         status_code = 200
 
         # same as line 26
-        payment_paid_notify(payment_id)
+        task_payment_paid_notify.delay(payment_id)
     else:
         response = {'status': 'payment_unverified'}
         status_code = 401

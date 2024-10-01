@@ -14,8 +14,7 @@ from apps.users.crud import TGUserCRUD
 from apps.users.utils import is_valid_email
 from apps.utils.handlers import MessageHandler, CallbackQueryHandler
 from apps.utils.keyboards.default import get_back_keyboard
-# from apps.notifications.tasks import notify_managers
-from main.huey_config import notify_managers
+from apps.notifications.tasks import task_notify_managers
 from .start import StartHandler
 
 
@@ -135,4 +134,4 @@ class ScreenshotHandler(MessageHandler):
         )
         await self.state.clear()
 
-        notify_managers(payment_id)
+        task_notify_managers.delay(payment_id)

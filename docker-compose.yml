@@ -80,15 +80,36 @@ services:
       resources:
         limits:
           memory: 512M
-  huey:
+
+  celery:
     build: .
-    container_name: huey_worker
+    restart: unless-stopped
+    entrypoint: celery -A main worker -l info
     env_file:
       - .env
     depends_on:
       - redis
-      - backend
-    entrypoint: huey_consumer.py main.huey_config.huey
+      - db
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+
+  celery-beat:
+    build: .
+    restart: unless-stopped
+    entrypoint: celery -A main beat -l info
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
 
 volumes:
   postgres-data:
