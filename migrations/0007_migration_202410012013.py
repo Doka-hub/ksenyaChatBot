@@ -79,7 +79,7 @@ class StartMessage(peewee.Model):
 class Subscription(peewee.Model):
     payment = snapshot.ForeignKeyField(backref='subscription', index=True, model='payment', on_delete='CASCADE', unique=True)
     user = snapshot.ForeignKeyField(backref='subscriptions', index=True, model='tguser', on_delete='CASCADE')
-    channel = snapshot.ForeignKeyField(backref='subscriptions', index=True, model='channel', null=True, on_delete='SET_NULL')
+    channel = snapshot.ForeignKeyField(backref='subscriptions', index=True, model='channel', null=True, on_delete='SET NULL')
     created_at = DateTimeField(default=datetime.datetime.now)
     active_by = DateTimeField(null=True)
     class Meta:

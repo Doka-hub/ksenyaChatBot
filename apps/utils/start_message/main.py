@@ -22,6 +22,7 @@ async def get_start_message():
         async with ClientSession() as client:
             response = await client.get('http://admin:8001/start-message/')
             data = await response.json()
+            print(data)
             start_message = StartMessage(**data)
             await save_start_message_data(start_message)
     return start_message
