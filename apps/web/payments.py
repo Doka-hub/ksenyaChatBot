@@ -1,9 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from aiohttp import web
 from aiohttp.web_response import json_response
 
-from apps.notifications.tasks import task_payment_paid, task_payment_unpaid
+from apps.notifications.tasks import task_payment_paid_notify, task_payment_unpaid_notify
 from apps.payments.crud import PaymentCRUD
 from apps.payments.models import PaymentType
 from apps.utils import stripe
@@ -29,8 +29,7 @@ async def stripe_handle(request: web.Request):
     payment = await PaymentCRUD.get_by_field('stripe_id', stripe_id)
 
     # mark payment paid and notify user, send invite link to join to the channel
-    await PaymentCRUD.update(payment, is_paid=True, paid_at=datetime.now())
-    task_payment_paid.delay(payment.id)
+    task_payment_paid_notify.delay(payment.id)
 
     return json_response()
 
@@ -52,7 +51,7 @@ async def stripe_payment_unpaid(request: web.Request):
     payment = await PaymentCRUD.get(stripe_id=stripe_id, type=PaymentType.EU)
 
     # notify user to make payment
-    task_payment_unpaid.delay(payment.user.user_id)
+    task_payment_unpaid_notify.delay(payment.user.user_id)
 
     return json_response()
 
@@ -74,7 +73,7 @@ async def rb_payment_paid(request: web.Request):
         status_code = 200
 
         # same as line 26
-        task_payment_paid.delay(payment_id)
+        task_payment_paid_notify.delay(payment_id)
     else:
         response = {'status': 'payment_unverified'}
         status_code = 401

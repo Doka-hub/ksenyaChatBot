@@ -3,6 +3,7 @@ from enum import Enum
 
 import peewee
 
+from apps.channels.models import Channel
 from apps.users.models import TGUser
 from apps.utils.models import BaseModel
 
@@ -32,3 +33,22 @@ class Payment(BaseModel):
     paid_at = peewee.DateTimeField(null=True)
 
     is_paid = peewee.BooleanField(default=False, verbose_name='Оплачено')
+
+
+class Subscription(BaseModel):
+    payment = peewee.ForeignKeyField(
+        Payment,
+        unique=True,
+        backref='subscription',
+        on_delete='CASCADE'
+    )
+    user = peewee.ForeignKeyField(TGUser, backref='subscriptions', on_delete='CASCADE')
+    channel = peewee.ForeignKeyField(
+        Channel,
+        backref='subscriptions',
+        on_delete='SET_NULL',
+        null=True,
+    )
+
+    created_at = peewee.DateTimeField(default=datetime.now)
+    active_by = peewee.DateTimeField(null=True)
