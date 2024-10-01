@@ -1,5 +1,6 @@
-import asyncio
 from datetime import datetime, timedelta
+
+from asgiref.sync import async_to_sync
 
 from apps.channels.crud import ChannelCRUD
 from apps.channels.keyboards.inline import get_join_request_link_inline_keyboard
@@ -23,7 +24,7 @@ async def notify_managers(payment_id: int):
 
 @celery_app.task()
 async def task_notify_managers(payment_id: int):
-    asyncio.run(notify_managers(payment_id))
+    async_to_sync(notify_managers)(payment_id)
 
 
 async def payment_paid_notify(payment_id: int):
@@ -51,12 +52,15 @@ async def payment_paid_notify(payment_id: int):
         message=f'Ваш заказ был оплачен! \nВот ваша ссылка для вступления - {channel.url}',
         reply_markup=get_join_request_link_inline_keyboard(channel.url),
     )
-    task_update_subscription_notify.apply_async((payment.id,), eta=datetime.utcnow() + timedelta(seconds=5))
+    task_update_subscription_notify.apply_async(
+        (payment.id,),
+        eta=datetime.utcnow() + timedelta(seconds=5)
+    )
 
 
 @celery_app.task()
 def task_payment_paid_notify(payment_id: int):
-    asyncio.run(payment_paid_notify(payment_id))
+    async_to_sync(payment_paid_notify)(payment_id)
 
 
 async def payment_unpaid_notify(user_id: int):
@@ -69,7 +73,7 @@ async def payment_unpaid_notify(user_id: int):
 
 @celery_app.task()
 def task_payment_unpaid_notify(user_id: int):
-    asyncio.run(payment_unpaid_notify(user_id))
+    async_to_sync(payment_unpaid_notify)(user_id)
 
 
 async def update_subscription_notify(payment_id: int):
@@ -85,4 +89,4 @@ async def update_subscription_notify(payment_id: int):
 
 @celery_app.task()
 def task_update_subscription_notify(payment_id: int):
-    asyncio.run(update_subscription_notify(payment_id))
+    async_to_sync(update_subscription_notify)(payment_id)

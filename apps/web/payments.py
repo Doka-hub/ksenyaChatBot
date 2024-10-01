@@ -29,7 +29,7 @@ async def stripe_handle(request: web.Request):
     payment = await PaymentCRUD.get_by_field('stripe_id', stripe_id)
 
     # mark payment paid and notify user, send invite link to join to the channel
-    task_payment_paid_notify.delay(payment.id)
+    await task_payment_paid_notify(payment.id)
 
     return json_response()
 

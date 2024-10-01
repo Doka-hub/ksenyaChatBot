@@ -29,6 +29,7 @@ peewee-async = "^0.12.1"
 pandas = "^2.2.3"
 openpyxl = "^3.1.5"
 xlsxwriter = "^3.2.0"
+asgiref = "^3.8.1"
 
 
 [tool.poetry.group.dev.dependencies]
