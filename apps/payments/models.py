@@ -8,8 +8,8 @@ from apps.utils.models import BaseModel
 
 
 class PaymentType(Enum):
-    EU = 'EU'
-    RB = 'RB'
+    EU = 'eur'
+    RB = 'rub'
 
 
 class RBDetails(BaseModel):
@@ -27,7 +27,7 @@ class Payment(BaseModel):
         choices=PaymentType,
         verbose_name='Тип Оплаты',
     )
-    screenshot = peewee.CharField(max_length=255, verbose_name='Путь к фалу')
+    screenshot = peewee.CharField(max_length=255, verbose_name='Путь к фалу', null=True)
     created_at = peewee.DateTimeField(default=datetime.now)
     paid_at = peewee.DateTimeField(null=True)
 

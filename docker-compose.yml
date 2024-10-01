@@ -30,9 +30,11 @@ services:
       - .env
     ports:
       - "8000:8000"
-    volumes:
-      - media-files:/var/www/media:ro
-      - bot-static-files:/home/app/static
+#    volumes:
+#      - media-files:/home/app/media
+#      - static-files:/home/app/static
+#    networks:
+#      - tg-ksenya-chat-bot
 #    deploy:
 #      resources:
 #        limits:
@@ -49,9 +51,10 @@ services:
       - ./.nginx/ssl-dhparam.pem:/etc/nginx/ssl-dhparam.pem:ro
       - certs:/etc/nginx/ssl:ro
       - certbot-www:/var/www/certbot:ro
-      - media-files:/var/www/media:ro
-      - static-files:/var/www/static:ro
-      - bot-static-files:/home/app/static:ro
+      - admin_media-files:/home/app/media
+      - admin_static-files:/home/app/static
+#    networks:
+#      - tg-ksenya-chat-bot
     deploy:
       resources:
         limits:
@@ -111,10 +114,12 @@ services:
 volumes:
   postgres-data:
   redis-data:
-  media-files:
+  admin_media-files:
+    external: true
   bot-static-files:
-  static-files:
+  admin_static-files:
+    external: true
   certs:
   certbot-www:
-networks:
-  tg-ksenya-chat-bot:
+#networks:
+#  tg-ksenya-chat-bot:

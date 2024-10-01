@@ -20,7 +20,7 @@ async def get_start_message():
         start_message = StartMessage(**json.loads(start_message_data))
     else:
         async with ClientSession() as client:
-            response = await client.get('http://localhost:8001/start-message/')
+            response = await client.get('http://admin:8001/start-message/')
             data = await response.json()
             start_message = StartMessage(**data)
             await save_start_message_data(start_message)

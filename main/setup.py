@@ -51,7 +51,7 @@ def create_app():
         ('/api', web_app),
     ]
 
-    app.router.add_static('/bot-static', 'static')
+#    app.router.add_static('/bot-static', 'static')
     for prefix, subapp in subapps:
         subapp['bot'] = bot
         subapp['dp'] = dp
