@@ -1,12 +1,11 @@
-from datetime import datetime
-
 from aiohttp import web
 from aiohttp.web_response import json_response
 
-from apps.notifications.tasks import payment_paid_notify, payment_unpaid_notify
 from apps.payments.crud import PaymentCRUD
 from apps.payments.models import PaymentType
 from apps.utils import stripe
+# from apps.notifications.tasks import payment_paid_notify, payment_unpaid_notify
+from main.huey_config import payment_paid_notify, payment_unpaid_notify
 from main.loader import settings
 
 payment_app = web.Application()
