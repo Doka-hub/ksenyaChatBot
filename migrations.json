@@ -9,6 +9,7 @@
         "apps.payments.models.Payment",
         "apps.payments.models.RBDetails",
         "apps.channels.models.Channel",
-        "apps.users.models.StartMessage"
+        "apps.users.models.StartMessage",
+        "apps.payments.models.Subscription"
     ]
 }
