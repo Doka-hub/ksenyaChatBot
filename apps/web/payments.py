@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from aiohttp import web
 from aiohttp.web_response import json_response

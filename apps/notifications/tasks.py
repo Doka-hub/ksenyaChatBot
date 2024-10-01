@@ -1,3 +1,4 @@
+import asyncio
 from datetime import datetime, timedelta
 
 from apps.channels.crud import ChannelCRUD
@@ -10,8 +11,7 @@ from main.celery import celery_app
 from .utils import send_message
 
 
-@celery_app.task()
-async def task_notify_managers(payment_id: int):
+async def notify_managers(payment_id: int):
     payment = await PaymentCRUD.get_by_id(payment_id)
     managers = await TGUser.filter(TGUser.role == Role.manager.value).aio_execute()
     for manager in managers:
@@ -22,7 +22,11 @@ async def task_notify_managers(payment_id: int):
 
 
 @celery_app.task()
-async def task_payment_paid_notify(payment_id: int):
+async def task_notify_managers(payment_id: int):
+    asyncio.run(notify_managers(payment_id))
+
+
+async def payment_paid_notify(payment_id: int):
     payment = await PaymentCRUD.get_by_id(payment_id)
     channel = await ChannelCRUD.get_first()
 
@@ -51,7 +55,11 @@ async def task_payment_paid_notify(payment_id: int):
 
 
 @celery_app.task()
-async def task_payment_unpaid_notify(user_id: int):
+def task_payment_paid_notify(payment_id: int):
+    asyncio.run(payment_paid_notify(payment_id))
+
+
+async def payment_unpaid_notify(user_id: int):
     await send_message(
         user_id,
         message=f'Вы не забыли оплатить заказ?',
@@ -60,8 +68,11 @@ async def task_payment_unpaid_notify(user_id: int):
 
 
 @celery_app.task()
-async def task_update_subscription_notify(payment_id: int):
+def task_payment_unpaid_notify(user_id: int):
+    asyncio.run(payment_unpaid_notify(user_id))
 
+
+async def update_subscription_notify(payment_id: int):
     payment = await PaymentCRUD.get_by_id(payment_id)
     user_id = payment.user.user_id
 
@@ -70,3 +81,8 @@ async def task_update_subscription_notify(payment_id: int):
         message=f'Ваша подписка подходит к концу ({payment.subscription.active_by})',
         reply_markup=get_payment_choose_inline_keyboard(),
     )
+
+
+@celery_app.task()
+def task_update_subscription_notify(payment_id: int):
+    asyncio.run(update_subscription_notify(payment_id))
