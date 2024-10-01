@@ -8,7 +8,7 @@ from .models import TGUser
 
 async def get_user_payments(user: TGUser):
     channel = await ChannelCRUD.get_first()
-    paid_date = datetime.now() - timedelta(days=channel.days)
+    paid_date = datetime.now() - timedelta(days=channel.duration)
     user_payments = await Payment.filter(
         Payment.is_paid == True,
         Payment.paid_at >= paid_date,
