@@ -3,13 +3,13 @@ from typing import Any
 from apps.channels.crud import ChannelCRUD
 from apps.channels.keyboards.inline import get_channel_link_inline_keyboard
 from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
-from apps.users.utils import have_user_subscription
+from apps.users.utils import have_user_active_subscription
 from apps.utils.handlers import MessageHandler
 
 
 class ChannelRequestHandler(MessageHandler):
     async def handle(self) -> Any:
-        if await have_user_subscription(self.user):
+        if await have_user_active_subscription(self.user):
             user_joined = await self.event.bot.approve_chat_join_request(
                 self.event.chat.id,
                 self.from_user.id,

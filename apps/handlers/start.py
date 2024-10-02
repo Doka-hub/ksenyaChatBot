@@ -5,7 +5,7 @@ from aiogram.handlers import MessageHandlerCommandMixin
 
 from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
 from apps.users.keyboards.inline import get_manager_menu_inline_keyboard
-from apps.users.utils import get_user_subscriptions
+from apps.users.utils import get_user_active_subscriptions
 from apps.utils.handlers import MessageHandler
 from apps.utils.misc import set_manager_bot_commands
 from apps.utils.start_message import get_start_message
@@ -26,7 +26,7 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
             )
             return
 
-        subscriptions = await get_user_subscriptions(self.user)
+        subscriptions = await get_user_active_subscriptions(self.user)
         if subscriptions:
             last = subscriptions[-1]
             await self.event.answer(
