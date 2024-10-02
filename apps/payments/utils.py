@@ -46,10 +46,11 @@ async def create_payment(user, payment_type) -> tuple[Payment, str | None]:
 async def create_subscription(payment: Payment, channel: Channel):
     # если у пользователя уже есть подписка, то создаем новую подписку со сдвинутой датой
     if await have_user_subscription(payment.user):
-        subscription = await Subscription.filter(
+        subscriptions = await Subscription.filter(
             Subscription.user == payment.user,
             Subscription.active_by <= payment.paid_at,
-        ).aio_execute()
+        ).order_by(Subscription.active_by.desc()).aio_execute()
+        subscription = subscriptions[0]
         active_by = subscription.active_by + timedelta(days=channel.duration)
     else:
         active_by = payment.paid_at + timedelta(days=channel.duration)
