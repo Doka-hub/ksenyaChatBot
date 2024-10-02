@@ -77,4 +77,4 @@ async def send_screenshot(payment_id: int, screenshot, bot):
         content_type=f'image/{mime_type}',
     )
 
-    task_send_screenshot.delay((payment_id, data))
+    task_send_screenshot.delay(payment_id, data)
