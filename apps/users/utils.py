@@ -24,7 +24,7 @@ async def is_user_paid(user: TGUser):
 async def get_user_active_subscriptions(user: TGUser):
     return await Subscription.filter(
         Subscription.user == user,
-        Subscription.active_by <= datetime.utcnow(),
+        Subscription.active_by >= datetime.utcnow(),
     ).aio_execute()
 
 
