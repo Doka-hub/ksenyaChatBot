@@ -28,6 +28,7 @@ class PaymentCRUD(CRUDBase):
         'id',
 
         'user',
+        'channel',
         'stripe_id',
         'amount',
         'type',
