@@ -29,7 +29,7 @@ async def get_user_active_subscriptions(user: TGUser):
 
 
 async def have_user_active_subscription(user: TGUser):
-    return len(get_user_active_subscriptions(user)) >= 1
+    return len(await get_user_active_subscriptions(user)) >= 1
 
 
 def is_valid_email(email: str) -> bool:
