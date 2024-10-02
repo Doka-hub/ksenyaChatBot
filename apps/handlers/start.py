@@ -6,7 +6,7 @@ from aiogram.handlers import MessageHandlerCommandMixin
 
 from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
 from apps.users.keyboards.inline import get_manager_menu_inline_keyboard
-from apps.users.utils import get_user_payments
+from apps.users.utils import get_user_subscriptions
 from apps.utils.handlers import MessageHandler
 from apps.utils.misc import set_manager_bot_commands
 from apps.utils.start_message import get_start_message
@@ -27,12 +27,11 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
             )
             return
 
-        user_payments = await get_user_payments(self.user)
-
-        if len(user_payments) >= 1:
-            last = user_payments[-1]
+        subscriptions = await get_user_subscriptions(self.user)
+        if subscriptions:
+            last = subscriptions[-1]
             await self.event.answer(
-                f'Ваша подписка активна до: {(last.paid_at + timedelta(days=30)).date()}',
+                f'Ваша подписка активна до: {last.active_by.strftime("%Y-%m-%d")}',
             )
         else:
             start_message = await get_start_message()

@@ -18,14 +18,18 @@ async def get_user_payments(user: TGUser):
 
 
 async def is_user_paid(user: TGUser):
-    return len(await get_user_payments(user)) >= 1
+    return bool(await get_user_payments(user))
+
+
+async def get_user_subscriptions(user: TGUser):
+    return await Subscription.filter(
+        Subscription.user == user,
+        Subscription.active_by <= datetime.utcnow(),
+    ).aio_execute()
 
 
 async def have_user_subscription(user: TGUser):
-    return bool(await Subscription.filter(
-        Subscription.user == user,
-        Subscription.active_by <= datetime.utcnow(),
-    ).aio_execute())
+    return bool(get_user_subscriptions(user))
 
 
 def is_valid_email(email: str) -> bool:
