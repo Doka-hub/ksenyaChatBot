@@ -76,11 +76,12 @@ def task_payment_unpaid_notify(user_id: int):
 
 async def update_subscription_notify(payment_id: int):
     payment = await PaymentCRUD.get_by_id(payment_id)
+    subscription = await payment.subscription.aio_get()
     user_id = payment.user.user_id
 
     await send_message(
         user_id,
-        message=f'Ваша подписка подходит к концу ({payment.subscription.active_by})',
+        message=f'Ваша подписка подходит к концу ({subscription.active_by})',
         reply_markup=get_payment_choose_inline_keyboard(),
     )
 
