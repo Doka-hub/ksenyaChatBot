@@ -49,7 +49,7 @@ async def create_subscription(payment: Payment, channel: Channel):
         subscription = await Subscription.filter(
             Subscription.user == payment.user,
             Subscription.active_by <= payment.paid_at,
-        )
+        ).aio_execute()
         active_by = subscription.active_by + timedelta(days=channel.duration)
     else:
         active_by = payment.paid_at + timedelta(days=channel.duration)
