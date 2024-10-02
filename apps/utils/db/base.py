@@ -61,7 +61,6 @@ class CRUDBase(metaclass=ABCMeta):
     @classmethod
     @check_fields()
     async def get(cls, **fields) -> Model:
-        print(fields)
         filter_fields = ((cls.get_model_field_condition(field, fields[field]),) for field in fields)
         query = cls.model.select(*cls.get_query_fields()).where(*filter_fields)
         return await query.aio_get()

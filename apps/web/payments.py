@@ -1,10 +1,9 @@
 from aiohttp import web
 from aiohttp.web_response import json_response
 
-from apps.payments.crud import PaymentCRUD
-from apps.payments.models import PaymentType
-from apps.utils import stripe
 from apps.notifications.tasks import task_payment_paid_notify, task_payment_unpaid_notify
+from apps.payments.crud import PaymentCRUD
+from apps.utils import stripe
 from main.loader import settings
 
 payment_app = web.Application()
@@ -46,10 +45,10 @@ async def stripe_payment_unpaid(request: web.Request):
 
     # looking for payment in db
     stripe_id = event.data.object.id
-    payment = await PaymentCRUD.get(stripe_id=stripe_id, type=PaymentType.EU)
+    payment = await PaymentCRUD.get(stripe_id=stripe_id)
 
     # notify user to make payment
-    task_payment_unpaid_notify(payment.user.user_id)
+    task_payment_unpaid_notify.delay(payment.user.user_id)
 
     return json_response()
 
@@ -70,7 +69,6 @@ async def rb_payment_paid(request: web.Request):
         response = {'status': 'payment_verified'}
         status_code = 200
 
-        # same as line 26
         task_payment_paid_notify.delay(payment_id)
     else:
         response = {'status': 'payment_unverified'}

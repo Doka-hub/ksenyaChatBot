@@ -21,6 +21,7 @@ class RBDetails(BaseModel):
 
 class Payment(BaseModel):
     user = peewee.ForeignKeyField(TGUser, backref='payments', on_delete='CASCADE')
+    channel = peewee.ForeignKeyField(Channel, backref='payments', on_delete='SET NULL', null=True)
     stripe_id = peewee.CharField(max_length=255, null=True, verbose_name='Stripe ID')
     amount = peewee.DecimalField(max_digits=10, decimal_places=2, verbose_name='Сумма')
     type = peewee.CharField(
