@@ -7,7 +7,7 @@ from apps.channels.crud import ChannelCRUD
 from apps.channels.models import Channel
 from apps.payments.crud import PaymentCRUD
 from apps.payments.models import Payment, PaymentType, Subscription
-from apps.payments.tasks import task_send_screenshot
+from apps.payments.tasks import send_screenshot
 from apps.users.utils import have_user_subscription
 from apps.utils import stripe
 
@@ -77,4 +77,4 @@ async def send_screenshot(payment_id: int, screenshot, bot):
         content_type=f'image/{mime_type}',
     )
 
-    task_send_screenshot.delay(payment_id, data)
+    await send_screenshot(payment_id, data)
