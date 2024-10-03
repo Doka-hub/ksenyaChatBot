@@ -14,9 +14,7 @@ class PaymentType(Enum):
 
 
 class RBDetails(BaseModel):
-    account_number = peewee.CharField(max_length=255)
-    field_1 = peewee.CharField(max_length=255)
-    field_2 = peewee.CharField(max_length=255)
+    text = peewee.TextField(default='text')
 
 
 class Payment(BaseModel):
