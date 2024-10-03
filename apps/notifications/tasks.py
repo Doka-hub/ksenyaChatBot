@@ -5,9 +5,10 @@ from apps.channels.keyboards.inline import get_join_request_link_inline_keyboard
 from apps.payments.crud import PaymentCRUD
 from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
 from apps.payments.models import Subscription
-from apps.payments.utils import create_subscription
+from apps.payments.utils import create_subscription, have_user_active_subscription
 from apps.users.models import Role, TGUser
 from main.celery import celery_app, celery_event_loop
+from main.loader import bot
 from .utils import send_message
 
 
@@ -47,9 +48,9 @@ async def payment_paid_notify(payment_id: int):
         message=f'Ваш заказ был оплачен! \nВот ваша ссылка для вступления - {channel.url}',
         reply_markup=get_join_request_link_inline_keyboard(channel.url),
     )
-    task_update_subscription_notify.apply_async(
+    task_remove_user_from_channel.apply_async(
         (subscription.id,),
-        eta=datetime.utcnow() + timedelta(seconds=5)
+        eta=subscription.active_by,
     )
 
 
@@ -71,17 +72,15 @@ def task_payment_unpaid_notify(user_id: int):
     celery_event_loop.run_until_complete(payment_unpaid_notify(user_id))
 
 
-async def update_subscription_notify(subscription_id: int):
+async def remove_user_from_channel(subscription_id: int):
     subscription = await Subscription.aio_get(Subscription.id == subscription_id)
     user_id = subscription.user.user_id
+    channel_id = subscription.channel.telegram_chat_id
 
-    await send_message(
-        user_id,
-        message=f'Ваша подписка подходит к концу ({subscription.active_by.strftime("%Y-%m-%d")})',
-        reply_markup=get_payment_choose_inline_keyboard(),
-    )
+    await bot.ban_chat_member(channel_id, user_id)
+    await bot.unban_chat_member(channel_id, user_id)
 
 
 @celery_app.task()
-def task_update_subscription_notify(subscription_id: int):
-    celery_event_loop.run_until_complete(update_subscription_notify(subscription_id))
+def task_remove_user_from_channel(subscription_id: int):
+    celery_event_loop.run_until_complete(remove_user_from_channel(subscription_id))
