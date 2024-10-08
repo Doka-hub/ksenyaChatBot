@@ -10,6 +10,7 @@ from apps.payments.states import ChoosePaymentState, PaymentApproveState
 from apps.payments.text_templates import rb_payment_details_text
 from apps.payments.utils import create_payment, send_screenshot
 from apps.users.crud import TGUserCRUD
+from apps.users.keyboards.inline import get_policy_confirm_inline_keyboard
 from apps.users.utils import is_valid_email
 from apps.utils.handlers import MessageHandler, CallbackQueryHandler
 from apps.utils.keyboards.default import get_back_keyboard
@@ -23,30 +24,33 @@ class ChoosePaymentHandler(CallbackQueryHandler):
         payment_type = self.parsed_callback_data.type
         await self.state.update_data(payment_type=payment_type)
 
-        # if user doesn't have an email
-        if self.user.email is None:
-            message = 'Введите вашу почту:'
-            reply_markup = get_back_keyboard('Отменить')
+        if self.user.policy_confirmed:
+            # if user doesn't have an email
+            if self.user.email is None:
+                message = 'Введите пожалуйста свою почту, рагацци'
+                reply_markup = get_back_keyboard('Отменить')
 
-            await self.state.set_state(ChoosePaymentState.email)
-        else:
-            reply_markup = ReplyKeyboardRemove()
-
-            payment, payment_url = await create_payment(self.user, payment_type)
-            await self.state.update_data(payment_id=payment.id)
-
-            if payment_url:
-                message = f'''Вот ваша ссылка на оплату: <a href="{payment_url}">клик</a>'''
+                await self.state.set_state(ChoosePaymentState.email)
             else:
-                rb_details = await RBDetailsCRUD.get_first()
-                message = rb_payment_details_text.format(
-                    account_number=rb_details.account_number,
-                    field_1=rb_details.field_1,
-                    field_2=rb_details.field_2,
-                )
-                reply_markup = get_approve_payment_inline_keyboard()
-                await self.state.set_state(PaymentApproveState.paid)
+                reply_markup = ReplyKeyboardRemove()
 
+                payment, payment_url = await create_payment(self.user, payment_type)
+                await self.state.update_data(payment_id=payment.id)
+
+                if payment_url:
+                    message = f'Грацие милле! Для оплаты перейдите пожалуйста по <a href="{payment_url}">ссылке</a> '
+                else:
+                    rb_details = await RBDetailsCRUD.get_first()
+                    message = rb_payment_details_text.format(
+                        account_number=rb_details.account_number,
+                        field_1=rb_details.field_1,
+                        field_2=rb_details.field_2,
+                    )
+                    reply_markup = get_approve_payment_inline_keyboard()
+                    await self.state.set_state(PaymentApproveState.paid)
+        else:
+            message = 'Грацие! Переходя к следующему шагу вы подтверждаете, что согласны с договором <a href="https://docs.google.com/document/d/e/2PACX-1vTgQ5QbEIqgJMwo2IBVw7Xk5YRSItI6yTO0mos7yxGdP1Tt_VOJPCDWV0P_FRxJS7qVBVOyY65aNVO4/pub">публичной офертой</a>'
+            reply_markup = get_policy_confirm_inline_keyboard()
         await self.event.message.answer(message, reply_markup=reply_markup)
 
 
@@ -73,7 +77,7 @@ class EmailHandler(MessageHandler):
             payment, payment_url = await create_payment(self.user, payment_type)
 
             if payment_url:
-                message = f'''Вот ваша ссылка на оплату: <a href="{payment_url}">клик</a>'''
+                message = f'Грацие милле! Для оплаты перейдите пожалуйста по <a href="{payment_url}">ссылке</a> '
                 reply_markup = None
             else:
                 rb_details = await RBDetailsCRUD.get_first()
@@ -98,7 +102,7 @@ class PaymentApproveHandler(CallbackQueryHandler):
 
     async def handle(self) -> Any:
         await self.event.message.answer(
-            'Мы почти закончили! Отправьте пожалуйста скриншот перевода, чтобы мы могли подтвердить ваш платеж!',
+            'Мольто бене! Мы почти закончили! Отправьте пожалуйста скриншот перевода, чтобы мы могли подтвердить ваш платеж!',
         )
         await self.state.set_state(PaymentApproveState.screenshot)
 
@@ -113,7 +117,7 @@ class ScreenshotHandler(MessageHandler):
 
         await send_screenshot(payment_id, screenshot, self.bot)
         await self.event.answer(
-            f'Супер! Наши менеджеры скоро проверят ваш платеж и одобрят вам доступ к каналу!'
+            'Перфетто! Наш менеджер проверит ваш платеж и в скором времени одобрит ваш доступ к каналу!'
         )
         await self.state.clear()
 

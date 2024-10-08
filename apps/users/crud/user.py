@@ -15,6 +15,8 @@ class TGUserCRUD(CRUDBase):
 
         'email',
         'phone_number',
+
+        'policy_confirmed',
     ]
     read_only_fields = ['id']
 

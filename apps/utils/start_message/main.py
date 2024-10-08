@@ -10,7 +10,7 @@ redis = storage.redis
 
 async def save_start_message_data(message: StartMessage):
     serialized_message = message.json()
-    await redis.setex('start_message', 3600, serialized_message)
+    await redis.setex('start_message', 60*60*72, serialized_message)  # 72 часа
 
 
 async def get_start_message():
@@ -22,7 +22,6 @@ async def get_start_message():
         async with ClientSession() as client:
             response = await client.get('http://admin:8001/start-message/')
             data = await response.json()
-            print(data)
             start_message = StartMessage(**data)
             await save_start_message_data(start_message)
     return start_message

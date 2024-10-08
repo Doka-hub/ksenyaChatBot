@@ -22,7 +22,7 @@ def get_channel_link_inline_keyboard(url) -> InlineKeyboardMarkup:
         [
             [
                 InlineKeyboardButton(
-                    text='Перейти в канал!',
+                    text='Богемно-Нярядно',
                     url=url,
                 ),
             ],

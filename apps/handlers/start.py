@@ -30,7 +30,7 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
         if subscriptions:
             last = subscriptions[-1]
             await self.event.answer(
-                f'Ваша подписка активна до: {last.active_by.strftime("%Y-%m-%d")}',
+                f'Чао! Похоже, что Ваша подписка на Богемно -Нарядно все еще активна активна до: {last.active_by.strftime("%Y-%m-%d")}\nКе белло!'
             )
         else:
             start_message = await get_start_message()

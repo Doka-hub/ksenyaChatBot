@@ -10,10 +10,12 @@ from .handlers.payments import (
     PaymentApproveHandler,
     ScreenshotHandler,
 )
+from .handlers.policy import PolicyConfirmHandler
 from .handlers.start import StartHandler
 from .payments.callbacks import PaymentCallbackData, PaymentApproveCallbackData
 from .payments.states import ChoosePaymentState, PaymentApproveState
 from .users.filters import UserIsActive, UserIsManager
+from .users.callbacks import PolicyConfirmCallbackData
 from .users.keyboards.texts import TO_MENU
 from .utils.routers import (
     callback_query_register,
@@ -27,6 +29,13 @@ router = Router()
 # start
 message_register(router, StartHandler, UserIsActive(), CommandStart())
 message_register(router, StartHandler, UserIsActive(), F.text == TO_MENU)
+
+# policy
+callback_query_register(
+    router,
+    PolicyConfirmHandler,
+    PolicyConfirmCallbackData.filter(),
+)
 
 # payment
 callback_query_register(

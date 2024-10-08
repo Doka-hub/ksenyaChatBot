@@ -45,7 +45,7 @@ async def payment_paid_notify(payment_id: int):
 
     await send_message(
         payment.user.user_id,
-        message=f'Ваш заказ был оплачен! \nВот ваша ссылка для вступления - {channel.url}',
+        message=f'Аллора, Ваш заказ был оплачен! Конгратулацьони!  Это ваша <a href="{channel.url}">ссылка</a> для вступления (нажмите на ссылку и кликните “запросить вступление”) так вы автоматически добавитесь в канал.',
         reply_markup=get_join_request_link_inline_keyboard(channel.url),
     )
     task_remove_user_from_channel.apply_async(
@@ -62,7 +62,7 @@ def task_payment_paid_notify(payment_id: int):
 async def payment_unpaid_notify(user_id: int):
     await send_message(
         user_id,
-        message=f'Вы не забыли оплатить заказ?',
+        message=f'Скуза! Похоже, что вы еще раздумываете стоит ли присоединиться к каналу.  Будет очень жаль, не увидеть вас в Богемно-Нарядно! Это очень дорогой мне проект в который я вкладываю много любви, поверьте, он того стоит. Андиамо?',
         reply_markup=get_payment_choose_inline_keyboard(),
     )
 

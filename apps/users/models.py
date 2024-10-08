@@ -23,6 +23,7 @@ class TGUser(BaseModel):
 
     is_bot_blocked = peewee.BooleanField(default=False)
     is_active = peewee.BooleanField(default=True)
+    policy_confirmed = peewee.BooleanField(default=False)
 
     @property
     def is_manager(self):
