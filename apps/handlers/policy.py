@@ -19,6 +19,7 @@ class PolicyConfirmHandler(CallbackQueryHandler):
         await TGUserCRUD.update(self.user, **{'policy_confirmed': True})
         data = await self.state.get_data()
         payment_type = data['payment_type']
+        await self.event.message.delete()
 
         if self.user.email is None:
             message = 'Введите пожалуйста свою почту, рагацци'
