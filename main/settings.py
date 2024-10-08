@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     ADMINS_IDS: list[int] = []
     MANAGERS_IDS: list[int] = []
 
-    THROTTLE_TIME: ClassVar = 1
+    THROTTLE_TIME: ClassVar = 5
 
     # STRIPE
     STRIPE_SECRET_KEY: str
