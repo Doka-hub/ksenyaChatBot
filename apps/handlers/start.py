@@ -9,6 +9,7 @@ from apps.users.utils import get_user_active_subscriptions
 from apps.utils.handlers import MessageHandler
 from apps.utils.misc import set_manager_bot_commands
 from apps.utils.start_message import get_start_message
+from apps.utils.start_message.models import StartMessage
 
 
 class StartHandler(MessageHandlerCommandMixin, MessageHandler):
@@ -33,7 +34,8 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
                 f'Ваша подписка активна до: {last.active_by.strftime("%Y-%m-%d")}',
             )
         else:
-            start_message = await get_start_message()
+            # start_message = await get_start_message()
+            start_message = StartMessage(text='hi')
             payment_choose_inline_keyboard = get_payment_choose_inline_keyboard()
 
             if start_message.photo:
