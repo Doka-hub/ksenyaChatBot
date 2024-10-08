@@ -7,9 +7,7 @@ class RBDetailsCRUD(CRUDBase):
     fields = [
         'id',
 
-        'account_number',
-        'field_1',
-        'field_1',
+        'text',
     ]
     read_only_fields = fields
 

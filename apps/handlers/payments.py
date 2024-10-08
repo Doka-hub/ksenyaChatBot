@@ -7,7 +7,6 @@ from apps.payments.callbacks import PaymentCallbackData, PaymentApproveCallbackD
 from apps.payments.crud import RBDetailsCRUD
 from apps.payments.keyboards.inline import get_approve_payment_inline_keyboard
 from apps.payments.states import ChoosePaymentState, PaymentApproveState
-from apps.payments.text_templates import rb_payment_details_text
 from apps.payments.utils import create_payment, send_screenshot
 from apps.users.crud import TGUserCRUD
 from apps.users.keyboards.inline import get_policy_confirm_inline_keyboard
@@ -41,11 +40,7 @@ class ChoosePaymentHandler(CallbackQueryHandler):
                     message = f'Грацие милле! Для оплаты перейдите пожалуйста по <a href="{payment_url}">ссылке</a> '
                 else:
                     rb_details = await RBDetailsCRUD.get_first()
-                    message = rb_payment_details_text.format(
-                        account_number=rb_details.account_number,
-                        field_1=rb_details.field_1,
-                        field_2=rb_details.field_2,
-                    )
+                    message = rb_details.text
                     reply_markup = get_approve_payment_inline_keyboard()
                     await self.state.set_state(PaymentApproveState.paid)
         else:
@@ -81,11 +76,8 @@ class EmailHandler(MessageHandler):
                 reply_markup = None
             else:
                 rb_details = await RBDetailsCRUD.get_first()
-                message = rb_payment_details_text.format(
-                    account_number=rb_details.account_number,
-                    field_1=rb_details.field_1,
-                    field_2=rb_details.field_2,
-                )
+                message = rb_details.text
+
                 reply_markup = get_approve_payment_inline_keyboard()
                 await self.state.set_state(PaymentApproveState.paid)
 
