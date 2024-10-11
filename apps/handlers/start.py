@@ -63,5 +63,3 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
                     start_message.text,
                     reply_markup=payment_choose_inline_keyboard,
                 )
-
-        await self.event.delete()

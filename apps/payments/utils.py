@@ -10,6 +10,7 @@ from apps.payments.crud import PaymentCRUD
 from apps.payments.models import Payment, PaymentType, Subscription
 from apps.users.utils import have_user_active_subscription
 from apps.utils import stripe
+from main.loader import settings
 
 
 async def create_payment(user, payment_type) -> tuple[Payment, str | None]:
@@ -26,6 +27,7 @@ async def create_payment(user, payment_type) -> tuple[Payment, str | None]:
                 1,
                 'payment',
                 email=user.email,
+                success_url=f'https://t.me/{settings.BOT_USERNAME.replace("@", "")}',
             )
             amount = channel.eur_amount
             payment_url = session.url

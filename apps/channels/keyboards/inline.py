@@ -8,7 +8,7 @@ def get_join_request_link_inline_keyboard(url) -> InlineKeyboardMarkup:
         [
             [
                 InlineKeyboardButton(
-                    text='Вступить в канал!',
+                    text='Богемно-Нярядно',
                     url=url,
                 ),
             ],

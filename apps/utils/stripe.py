@@ -14,6 +14,7 @@ def create_checkout_session(
     quantity: int,
     name: str,
     metadata=None,
+    success_url: str = None,
     **kwargs,
 ) -> stripe.checkout.Session:
     session = _stripe.checkout.Session.create(
@@ -30,7 +31,7 @@ def create_checkout_session(
             }
         ],
         mode='payment',
-        success_url='https://t.me/web_app_testBot',
+        success_url=success_url,
         metadata=metadata,
         customer_email=kwargs.get('email'),
     )
