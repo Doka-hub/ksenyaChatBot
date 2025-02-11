@@ -24,42 +24,41 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
                 'Меню менеджера',
                 reply_markup=get_manager_menu_inline_keyboard(),
             )
-            return
-
-        subscriptions = await get_user_active_subscriptions(self.user)
-        if subscriptions:
-            last = subscriptions[-1]
-            await self.event.answer(
-                f'Чао! Похоже, что Ваша подписка на Богемно -Нарядно все еще активна активна до: {last.active_by.strftime("%Y-%m-%d")}\nКе белло!'
-            )
         else:
-            start_message = await get_start_message()
-            payment_choose_inline_keyboard = get_payment_choose_inline_keyboard()
-
-            if start_message.photo:
-                action = self.event.answer_photo
-                media = start_message.photo
-            elif start_message.video:
-                action = self.event.answer_video
-                media = start_message.video
+            subscriptions = await get_user_active_subscriptions(self.user)
+            if subscriptions:
+                last = subscriptions[-1]
+                await self.event.answer(
+                    f'Чао! Похоже, что Ваша подписка на Богемно -Нарядно все еще активна активна до: {last.active_by.strftime("%Y-%m-%d")}\nКе белло!'
+                )
             else:
-                action = self.event.answer
-                media = None
+                start_message = await get_start_message()
+                payment_choose_inline_keyboard = get_payment_choose_inline_keyboard()
 
-            if media:
-                try:
+                if start_message.photo:
+                    action = self.event.answer_photo
+                    media = start_message.photo
+                elif start_message.video:
+                    action = self.event.answer_video
+                    media = start_message.video
+                else:
+                    action = self.event.answer
+                    media = None
+
+                if media:
+                    try:
+                        await action(
+                            media,
+                            caption=start_message.text,
+                            reply_markup=payment_choose_inline_keyboard,
+                        )
+                    except TelegramBadRequest:
+                        await self.event.answer(
+                            start_message.text,
+                            reply_markup=payment_choose_inline_keyboard,
+                        )
+                else:
                     await action(
-                        media,
-                        caption=start_message.text,
-                        reply_markup=payment_choose_inline_keyboard,
-                    )
-                except TelegramBadRequest:
-                    await self.event.answer(
                         start_message.text,
                         reply_markup=payment_choose_inline_keyboard,
                     )
-            else:
-                await action(
-                    start_message.text,
-                    reply_markup=payment_choose_inline_keyboard,
-                )

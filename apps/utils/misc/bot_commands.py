@@ -18,4 +18,5 @@ async def set_manager_bot_commands(bot: Bot):
         StartCommand,
         DownloadExcelCommand,
     ]
+    bot.set_my_commands()
     await bot.set_my_commands(commands=commands)

@@ -13,14 +13,19 @@ from .loader import settings, bot, dp
 
 async def on_startup(webhook_url):
     print(webhook_url)
-    await bot.set_webhook(webhook_url)
+    old_webhook_url = await bot.get_webhook_info()
+    if old_webhook_url.url != webhook_url:
+        await bot.set_webhook(webhook_url)
+    else:
+        print(f'Webhook already set {webhook_url}')
 
     # Установка команд для бота
-    await set_bot_commands(bot)
+    print(444)
 
 
 def bot_setup():
     logging.setup()
+    print('Bot setup')
 
     dp['webhook_url'] = settings.WEBHOOK_URL
     dp.startup.register(on_startup)

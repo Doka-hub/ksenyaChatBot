@@ -30,7 +30,26 @@ class TGUser(BaseModel):
         return Role(self.role) == Role.manager
 
 
+class ButtonMessage(BaseModel):
+    class Type(Enum):
+        INLINE = 'INLINE', 'Inline'
+        KEYBOARD = 'KEYBOARD', 'Keyboard'
+
+    type = peewee.CharField(verbose_name='Тип', max_length=10)
+    name = peewee.CharField(max_length=255, verbose_name='Название')
+    url = peewee.CharField(null=True, verbose_name='Ссылка')
+    callback_data = peewee.CharField(
+        max_length=255,
+        null=True,
+        verbose_name='Callback Data',
+    )
+
+    def __str__(self):
+        return f'{self.type} кнопка: {self.name}'
+
+
 class StartMessage(BaseModel):
     text = peewee.TextField()
     photo = peewee.CharField(max_length=255, verbose_name='Ссылка на фото')
     video = peewee.CharField(max_length=255, verbose_name='Ссылка на видео')
+    buttons = peewee.ManyToManyField(ButtonMessage, backref='messages', on_delete='SET NULL')
