@@ -4,7 +4,21 @@ from apps.channels.crud import ChannelCRUD
 from apps.channels.keyboards.inline import get_channel_link_inline_keyboard
 from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
 from apps.users.utils import have_user_active_subscription
-from apps.utils.handlers import MessageHandler
+from apps.utils.handlers import ChatMemberHandler, MessageHandler
+
+from main.loader import settings
+
+
+class ChannelJoinHandler(ChatMemberHandler):
+    async def handle(self):
+        invite_link = await self.event.bot.export_chat_invite_link(self.event.chat.id)
+        print(invite_link)
+        if invite_link:
+            await self.event.bot.send_message(
+                self.from_user.id,
+                'А перейти в сам канал можно кливнув по кнопке “Богемно-нарядно”. Кликайте и переходите в канал. Вьени куа: ',
+                reply_markup=get_channel_link_inline_keyboard(invite_link),
+            )
 
 
 class ChannelRequestHandler(MessageHandler):

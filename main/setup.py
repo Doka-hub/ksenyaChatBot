@@ -13,14 +13,14 @@ from .loader import settings, bot, dp
 
 async def on_startup(webhook_url):
     print(webhook_url)
-    old_webhook_url = await bot.get_webhook_info()
-    if old_webhook_url.url != webhook_url:
-        await bot.set_webhook(webhook_url)
-    else:
-        print(f'Webhook already set {webhook_url}')
+    # old_webhook_url = await bot.get_webhook_info()
+    # if old_webhook_url.url != webhook_url:
+    #     await bot.set_webhook(webhook_url)
+    # else:
+    #     print(f'Webhook already set {webhook_url}')
 
-    # Установка команд для бота
-    print(444)
+    # # Установка команд для бота
+    # print(444)
 
 
 def bot_setup():
@@ -28,7 +28,7 @@ def bot_setup():
     print('Bot setup')
 
     dp['webhook_url'] = settings.WEBHOOK_URL
-    dp.startup.register(on_startup)
+    # dp.startup.register(on_startup)
 
     # Регистрация мидлварей
     dp.message.middleware.register(ThrottlingMiddleware())
@@ -41,7 +41,10 @@ def bot_setup():
     dp.chat_join_request.outer_middleware.register(GetUserMiddleware())
 
     # Подключение обработчиков
+    bot.delete_webhook()
     dp.include_router(router)
+    dp.run_polling(bot)
+
 
 
 def create_app():

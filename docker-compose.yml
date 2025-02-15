@@ -80,6 +80,8 @@ services:
       resources:
         limits:
           memory: 512M
+    networks:
+      - ksenia-chat-bot
 
   celery:
     build: .
@@ -90,6 +92,8 @@ services:
     depends_on:
       - redis
       - db
+    networks:
+      - ksenia-chat-bot
     deploy:
       resources:
         limits:
@@ -100,6 +104,8 @@ services:
     build: .
     restart: unless-stopped
     entrypoint: celery -A main beat -l info
+    networks:
+      - ksenia-chat-bot
     env_file:
       - .env
     depends_on:
