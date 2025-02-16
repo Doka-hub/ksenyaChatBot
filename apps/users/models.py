@@ -32,6 +32,7 @@ class TGUser(BaseModel):
 
 
 class StartMessage(BaseModel):
+    type = peewee.CharField(max_length=255, unique=True)
     text = peewee.TextField()
     photo = peewee.CharField(max_length=255, null=True, verbose_name='Ссылка на фото')
     video = peewee.CharField(max_length=255, null=True, verbose_name='Ссылка на видео')

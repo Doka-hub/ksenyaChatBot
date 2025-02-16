@@ -1,20 +1,21 @@
 from aiohttp import web
 from aiohttp.web_response import json_response
 
-from apps.utils.start_message import save_start_message_data
-from apps.utils.start_message.models import StartMessage
+from apps.utils.messages import save_message_data
+from apps.utils.messages.models import StartMessage
 
 utils_app = web.Application()
 
 
-async def save_start_message(request: web.Request):
+async def save_message(request: web.Request):
     data = await request.json()
-    await save_start_message_data(StartMessage(**data))
+    message_type = data.get('type')
+    await save_message_data(message_type, StartMessage(**data))
     return json_response()
 
 
 utils_app.add_routes(
     [
-        web.post('/start-message', save_start_message),
+        web.post('/messages', save_message),
     ],
 )

@@ -6,13 +6,10 @@ from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
 from apps.users.utils import have_user_active_subscription
 from apps.utils.handlers import ChatMemberHandler, MessageHandler
 
-from main.loader import settings
-
 
 class ChannelJoinHandler(ChatMemberHandler):
     async def handle(self):
         invite_link = await self.event.bot.export_chat_invite_link(self.event.chat.id)
-        print(invite_link)
         if invite_link:
             await self.event.bot.send_message(
                 self.from_user.id,

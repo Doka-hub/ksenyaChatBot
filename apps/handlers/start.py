@@ -2,15 +2,14 @@ from typing import Any
 
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.handlers import MessageHandlerCommandMixin
-from aiogram.types import InlineKeyboardButton, KeyboardButton
+from aiogram.types import InlineKeyboardButton
 
-from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
 from apps.users.keyboards.inline import get_manager_menu_inline_keyboard
 from apps.users.utils import get_user_active_subscriptions
 from apps.utils.handlers import MessageHandler
 from apps.utils.misc import set_manager_bot_commands
-from apps.utils.start_message import get_start_message
-from apps.utils.keyboards import get_inline_keyboard, get_keyboard
+from apps.utils.messages import get_start_message
+from apps.utils.keyboards import get_inline_keyboard
 
 
 class StartHandler(MessageHandlerCommandMixin, MessageHandler):

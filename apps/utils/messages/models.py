@@ -1,5 +1,4 @@
 import pydantic
-from aiogram.types import InlineKeyboardButton, KeyboardButton
 
 
 class ButtonMessage(pydantic.BaseModel):
@@ -10,6 +9,7 @@ class ButtonMessage(pydantic.BaseModel):
 
 
 class StartMessage(pydantic.BaseModel):
+    type: str
     text: str
     photo: str | None = None
     video: str | None = None
