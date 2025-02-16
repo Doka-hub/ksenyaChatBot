@@ -50,6 +50,6 @@ class ButtonMessage(BaseModel):
 
 class StartMessage(BaseModel):
     text = peewee.TextField()
-    photo = peewee.CharField(max_length=255, verbose_name='Ссылка на фото')
-    video = peewee.CharField(max_length=255, verbose_name='Ссылка на видео')
+    photo = peewee.CharField(max_length=255, null=True, verbose_name='Ссылка на фото')
+    video = peewee.CharField(max_length=255, null=True, verbose_name='Ссылка на видео')
     buttons = peewee.ManyToManyField(ButtonMessage, backref='messages', on_delete='SET NULL')
