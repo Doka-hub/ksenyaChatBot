@@ -1,6 +1,6 @@
 from aiogram import F, Router
 from aiogram.filters import CommandStart, Command
-from aiogram.types import ContentType
+from aiogram.types import ChatMemberMember, ChatMemberOwner, ChatMemberAdministrator
 
 from .handlers.admins import DownloadExcelHandler
 from .handlers.channels import ChannelJoinHandler, ChannelRequestHandler
@@ -37,6 +37,13 @@ message_register(router, DownloadExcelHandler, UserIsManager(False), Command(Dow
 chat_member_register(
     router,
     ChannelJoinHandler,
+    F.new_chat_members.status.in_(
+        [
+            ChatMemberMember,
+            ChatMemberOwner,
+            ChatMemberAdministrator,
+        ],
+    ),
 )
 chat_join_request_register(router, ChannelRequestHandler)
 
