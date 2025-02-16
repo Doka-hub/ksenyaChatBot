@@ -37,7 +37,7 @@ message_register(router, DownloadExcelHandler, UserIsManager(False), Command(Dow
 chat_member_register(
     router,
     ChannelJoinHandler,
-    F.new_chat_members.status.in_(
+    F.new_chat_member.status.in_(
         [
             ChatMemberMember,
             ChatMemberOwner,
