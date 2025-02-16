@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardButton, KeyboardButton
 
 
 class ButtonMessage(pydantic.BaseModel):
-    type: InlineKeyboardButton | KeyboardButton
+    type: str['INLINE' | 'KEYBOARD']
     name: str
     url: str | None = None
     callback_data: str | None = None

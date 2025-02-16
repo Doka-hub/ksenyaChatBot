@@ -2,6 +2,7 @@ from typing import Any
 
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.handlers import MessageHandlerCommandMixin
+from aiogram.types import InlineKeyboardButton, KeyboardButton
 
 from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
 from apps.users.keyboards.inline import get_manager_menu_inline_keyboard
@@ -9,6 +10,7 @@ from apps.users.utils import get_user_active_subscriptions
 from apps.utils.handlers import MessageHandler
 from apps.utils.misc import set_manager_bot_commands
 from apps.utils.start_message import get_start_message
+from apps.utils.keyboards import get_inline_keyboard, get_keyboard
 
 
 class StartHandler(MessageHandlerCommandMixin, MessageHandler):
@@ -33,7 +35,20 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
                 )
             else:
                 start_message = await get_start_message()
-                payment_choose_inline_keyboard = get_payment_choose_inline_keyboard()
+                keyboards_data = start_message.buttons
+                buttons = []
+                for keyboard_data in keyboards_data:
+                    if keyboard_data.type == 'INLINE':
+                        buttons.append(
+                            [
+                                InlineKeyboardButton(
+                                    text=keyboard_data.name,
+                                    url=keyboard_data.url,
+                                    callback_data=keyboard_data.callback_data,
+                                ),
+                            ],
+                        )
+                buttons = get_inline_keyboard(buttons)
 
                 if start_message.photo:
                     action = self.event.answer_photo
@@ -50,15 +65,15 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
                         await action(
                             media,
                             caption=start_message.text,
-                            reply_markup=payment_choose_inline_keyboard,
+                            reply_markup=buttons,
                         )
                     except TelegramBadRequest:
                         await self.event.answer(
                             start_message.text,
-                            reply_markup=payment_choose_inline_keyboard,
+                            reply_markup=buttons,
                         )
                 else:
                     await action(
                         start_message.text,
-                        reply_markup=payment_choose_inline_keyboard,
+                        reply_markup=buttons,
                     )
