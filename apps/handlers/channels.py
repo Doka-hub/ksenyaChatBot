@@ -13,8 +13,6 @@ from apps.utils.messages import get_after_subscribe_message
 
 class ChannelJoinHandler(ChatMemberHandler):
     async def handle(self):
-        pprint(self.event)
-        pprint(self.from_user)
         invite_link = await self.event.bot.export_chat_invite_link(self.event.chat.id)
         message = await get_after_subscribe_message()
         if invite_link:
@@ -23,6 +21,7 @@ class ChannelJoinHandler(ChatMemberHandler):
                     self.from_user.id,
                     message.text,
                     reply_markup=get_channel_link_inline_keyboard(invite_link),
+                    parse_mode='MARKDOWN',
                 )
             except TelegramForbiddenError:
                 pass

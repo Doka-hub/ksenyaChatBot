@@ -65,14 +65,17 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
                             media,
                             caption=start_message.text,
                             reply_markup=buttons,
+                            parse_mode='MARKDOWN',
                         )
                     except TelegramBadRequest:
                         await self.event.answer(
                             start_message.text,
                             reply_markup=buttons,
+                            parse_mode='MARKDOWN',
                         )
                 else:
                     await action(
                         start_message.text,
                         reply_markup=buttons,
+                        parse_mode='MARKDOWN',
                     )
