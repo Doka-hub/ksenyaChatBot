@@ -1,24 +1,13 @@
 from aiogram import F, Router
-from aiogram.filters import CommandStart, Command
+from aiogram.filters import CommandStart, Command, ChatMemberUpdatedFilter, IS_MEMBER, IS_NOT_MEMBER, IS_ADMIN
 from aiogram.types import ChatMemberMember, ChatMemberOwner, ChatMemberAdministrator
 
 from .handlers.admins import DownloadExcelHandler
 from .handlers.channels import ChannelJoinHandler, ChannelRequestHandler
-from .handlers.payments import (
-    ChoosePaymentHandler,
-    EmailHandler,
-    PaymentApproveHandler,
-    ScreenshotHandler,
-)
-from .handlers.policy import PolicyConfirmHandler
 from .handlers.start import StartHandler
-from .payments.callbacks import PaymentCallbackData, PaymentApproveCallbackData
-from .payments.states import ChoosePaymentState, PaymentApproveState
 from .users.filters import UserIsActive, UserIsManager
-from .users.callbacks import PolicyConfirmCallbackData
 from .users.keyboards.texts import TO_MENU
 from .utils.routers import (
-    callback_query_register,
     message_register,
     chat_join_request_register,
     chat_member_register,
@@ -37,13 +26,7 @@ message_register(router, DownloadExcelHandler, UserIsManager(False), Command(Dow
 chat_member_register(
     router,
     ChannelJoinHandler,
-    F.new_chat_member.status.in_(
-        [
-            ChatMemberMember,
-            ChatMemberOwner,
-            ChatMemberAdministrator,
-        ],
-    ),
+    ChatMemberUpdatedFilter(IS_NOT_MEMBER >> IS_MEMBER),
 )
 chat_join_request_register(router, ChannelRequestHandler)
 
