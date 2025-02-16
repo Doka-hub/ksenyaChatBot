@@ -14,7 +14,7 @@ async def save_message_data(key, message: StartMessage):
 
 
 async def get_start_message():
-    start_message_data = await redis.get('start_message')
+    start_message_data = await redis.get('GREETER')
 
     if start_message_data:
         start_message = StartMessage(**json.loads(start_message_data))
@@ -23,12 +23,12 @@ async def get_start_message():
             response = await client.get('http://admin:8001/messages?type=greeter')
             data = await response.json()
             start_message = StartMessage(**data)
-            await save_message_data('start_message', start_message)
+            await save_message_data('GREETER', start_message)
     return start_message
 
 
 async def get_after_subscribe_message():
-    start_message_data = await redis.get('after_subscribe_message')
+    start_message_data = await redis.get('AFTER_SUBSCRIBE')
 
     if start_message_data:
         start_message = StartMessage(**json.loads(start_message_data))
@@ -37,5 +37,5 @@ async def get_after_subscribe_message():
             response = await client.get('http://admin:8001/messages?type=after_subscribe')
             data = await response.json()
             start_message = StartMessage(**data)
-            await save_message_data('after_subscribe_message', start_message)
+            await save_message_data('AFTER_SUBSCRIBE', start_message)
     return start_message
