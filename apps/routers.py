@@ -28,6 +28,5 @@ chat_member_register(
     ChannelJoinHandler,
     ChatMemberUpdatedFilter(IS_NOT_MEMBER >> IS_MEMBER),
 )
-chat_join_request_register(router, ChannelRequestHandler)
 
 __all__ = ['router']
