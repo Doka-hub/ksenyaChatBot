@@ -48,7 +48,7 @@ def bot_setup():
     print('Bot setup')
 
     dp['webhook_url'] = settings.WEBHOOK_URL
-    # dp.startup.register(on_startup)
+    dp.startup.register(on_startup)
 
     # Регистрация мидлварей
     dp.message.middleware.register(ThrottlingMiddleware())
