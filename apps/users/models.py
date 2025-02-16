@@ -30,11 +30,19 @@ class TGUser(BaseModel):
         return Role(self.role) == Role.manager
 
 
+
+class StartMessage(BaseModel):
+    text = peewee.TextField()
+    photo = peewee.CharField(max_length=255, null=True, verbose_name='Ссылка на фото')
+    video = peewee.CharField(max_length=255, null=True, verbose_name='Ссылка на видео')
+
+
 class ButtonMessage(BaseModel):
     class Type(Enum):
         INLINE = 'INLINE', 'Inline'
         KEYBOARD = 'KEYBOARD', 'Keyboard'
 
+    message = peewee.ForeignKeyField(StartMessage, backref='buttons', verbose_name='Сообщение')
     type = peewee.CharField(verbose_name='Тип', max_length=10)
     name = peewee.CharField(max_length=255, verbose_name='Название')
     url = peewee.CharField(null=True, verbose_name='Ссылка')
@@ -46,18 +54,3 @@ class ButtonMessage(BaseModel):
 
     def __str__(self):
         return f'{self.type} кнопка: {self.name}'
-
-
-class StartMessage(BaseModel):
-    text = peewee.TextField()
-    photo = peewee.CharField(max_length=255, null=True, verbose_name='Ссылка на фото')
-    video = peewee.CharField(max_length=255, null=True, verbose_name='Ссылка на видео')
-    buttons = peewee.ManyToManyField(ButtonMessage, backref='messages', on_delete='SET NULL')
-
-
-class StartMessageButton(BaseModel):
-    start_message = peewee.ForeignKeyField(StartMessage, backref='buttons', on_delete='CASCADE')
-    button = peewee.ForeignKeyField(ButtonMessage, backref='start_messages', on_delete='CASCADE')
-
-    def __str__(self):
-        return f'{self.start_message} - {self.button}'
