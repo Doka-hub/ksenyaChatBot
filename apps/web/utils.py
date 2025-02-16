@@ -8,7 +8,6 @@ utils_app = web.Application()
 
 
 async def save_start_message(request: web.Request):
-    print(request)
     data = await request.json()
     await save_start_message_data(StartMessage(**data))
     return json_response()
