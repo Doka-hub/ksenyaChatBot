@@ -37,6 +37,7 @@ message_register(router, DownloadExcelHandler, UserIsManager(False), Command(Dow
 chat_member_register(
     router,
     ChannelJoinHandler,
+    F.status.in_(['member', 'administrator', 'creator']),
 )
 chat_join_request_register(router, ChannelRequestHandler)
 
