@@ -53,3 +53,11 @@ class StartMessage(BaseModel):
     photo = peewee.CharField(max_length=255, null=True, verbose_name='Ссылка на фото')
     video = peewee.CharField(max_length=255, null=True, verbose_name='Ссылка на видео')
     buttons = peewee.ManyToManyField(ButtonMessage, backref='messages', on_delete='SET NULL')
+
+
+class StartMessageButton(BaseModel):
+    start_message = peewee.ForeignKeyField(StartMessage, backref='buttons', on_delete='CASCADE')
+    button = peewee.ForeignKeyField(ButtonMessage, backref='start_messages', on_delete='CASCADE')
+
+    def __str__(self):
+        return f'{self.start_message} - {self.button}'

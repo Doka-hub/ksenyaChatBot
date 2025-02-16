@@ -11,6 +11,7 @@
         "apps.channels.models.Channel",
         "apps.users.models.StartMessage",
         "apps.payments.models.Subscription",
-        "apps.users.models.ButtonMessage"
+        "apps.users.models.ButtonMessage",
+        "apps.users.models.StartMessageButton"
     ]
 }
