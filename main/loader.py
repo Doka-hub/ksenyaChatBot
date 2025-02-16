@@ -1,16 +1,16 @@
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
-from aiogram.fsm.storage.redis import RedisStorage
 from aiogram.enums import ParseMode
+from aiogram.fsm.storage.redis import RedisStorage
 
 from .settings import Settings
 
 
 class CustomDispatcher(Dispatcher):
-    def feed_update(self, bot, update, *args, **kwargs):
+    async def feed_update(self, bot, update, *args, **kwargs):
         print(update.event)
         print(update.event_type)
-        return super(CustomDispatcher, self).feed_update(*args, **kwargs)
+        return await super(CustomDispatcher, self).feed_update(bot, update, *args, **kwargs)
 
 
 settings = Settings()
