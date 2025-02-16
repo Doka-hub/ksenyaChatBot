@@ -28,7 +28,8 @@ async def on_startup(webhook_url):
         'my_chat_member',
         'chat_member',
     ]
-
+    print(old_webhook_url.url, webhook_url)
+    print(old_webhook_url.allowed_updates, allowed_updates)
     if old_webhook_url.url != webhook_url or old_webhook_url.allowed_updates != allowed_updates:
         await bot.delete_webhook(True)
         await bot.set_webhook(
