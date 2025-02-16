@@ -15,7 +15,24 @@ async def on_startup(webhook_url):
     print(webhook_url)
     old_webhook_url = await bot.get_webhook_info()
     if old_webhook_url.url != webhook_url:
-        await bot.set_webhook(webhook_url)
+        await bot.set_webhook(
+            webhook_url,
+            allowed_updates=[
+                'message',
+                'edited_message',
+                'channel_post',
+                'edited_channel_post',
+                'callback_query',
+                'inline_query',
+                'chosen_inline_result',
+                'shipping_query',
+                'pre_checkout_query',
+                'poll',
+                'poll_answer',
+                'my_chat_member',
+                'chat_member',
+            ],
+        )
     else:
         print(f'Webhook already set {webhook_url}')
 
@@ -42,7 +59,6 @@ def bot_setup():
 
     # Подключение обработчиков
     dp.include_router(router)
-
 
 
 def create_app():

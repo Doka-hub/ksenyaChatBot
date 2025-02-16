@@ -14,6 +14,9 @@ class CustomDispatcher(Dispatcher):
 
 
 settings = Settings()
-bot = Bot(settings.BOT_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN))
+bot = Bot(
+    settings.BOT_TOKEN,
+    default=DefaultBotProperties(parse_mode=ParseMode.MARKDOWN),
+)
 storage = RedisStorage.from_url(f'{settings.REDIS_HOST}:{settings.REDIS_PORT}')
 dp = CustomDispatcher(storage=storage)
