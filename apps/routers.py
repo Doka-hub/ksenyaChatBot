@@ -26,7 +26,7 @@ message_register(router, DownloadExcelHandler, UserIsManager(False), Command(Dow
 chat_member_register(
     router,
     ChannelJoinHandler,
-    ChatMemberUpdatedFilter(IS_NOT_MEMBER >> IS_MEMBER),
+    # ChatMemberUpdatedFilter(IS_NOT_MEMBER >> IS_MEMBER),
 )
 
 __all__ = ['router']
