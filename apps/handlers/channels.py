@@ -1,3 +1,4 @@
+from pprint import pprint
 from typing import Any
 
 from aiogram.exceptions import TelegramForbiddenError
@@ -12,7 +13,8 @@ from apps.utils.messages import get_after_subscribe_message
 
 class ChannelJoinHandler(ChatMemberHandler):
     async def handle(self):
-        print(self.event)
+        pprint(self.event)
+        pprint(self.from_user)
         invite_link = await self.event.bot.export_chat_invite_link(self.event.chat.id)
         message = await get_after_subscribe_message()
         if invite_link:
