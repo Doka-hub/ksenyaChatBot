@@ -16,6 +16,8 @@ class ChannelJoinHandler(ChatMemberHandler):
         pprint(self.event)
         pprint(self.from_user)
         invite_link = await self.event.bot.export_chat_invite_link(self.event.chat.id)
+        invite_link = await self.event.bot.create_chat_invite_link(self.event.chat.id, member_limit=1)
+        print(invite_link)
         message = await get_after_subscribe_message()
         if invite_link:
             try:
