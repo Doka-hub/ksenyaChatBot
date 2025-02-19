@@ -13,15 +13,12 @@ from apps.utils.messages import get_after_subscribe_message
 
 class ChannelJoinHandler(ChatMemberHandler):
     async def handle(self):
-        pprint(self.event)
-        pprint(self.from_user)
         invite_link = await self.event.bot.create_chat_invite_link(self.event.chat.id, member_limit=1)
-        print(invite_link)
         message = await get_after_subscribe_message()
         if invite_link:
             try:
                 await self.event.bot.send_message(
-                    self.from_user.id,
+                    self.event.new_chat_member.user.id,
                     message.text,
                     reply_markup=get_channel_link_inline_keyboard(invite_link.invite_link),
                 )
