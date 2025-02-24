@@ -65,14 +65,17 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
                             media,
                             caption=start_message.text,
                             reply_markup=buttons,
+                            link_preview_options=False,
                         )
                     except TelegramBadRequest:
                         await self.event.answer(
                             start_message.text,
                             reply_markup=buttons,
+                            link_preview_options=False,
                         )
                 else:
                     await action(
                         start_message.text,
                         reply_markup=buttons,
+                        link_preview_options=False,
                     )
