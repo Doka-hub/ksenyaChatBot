@@ -7,9 +7,9 @@ from aiogram.types import InlineKeyboardButton
 from apps.users.keyboards.inline import get_manager_menu_inline_keyboard
 from apps.users.utils import get_user_active_subscriptions
 from apps.utils.handlers import MessageHandler
-from apps.utils.misc import set_manager_bot_commands
-from apps.utils.messages import get_start_message
 from apps.utils.keyboards import get_inline_keyboard
+from apps.utils.messages import get_start_message
+from apps.utils.misc import set_manager_bot_commands
 
 
 class StartHandler(MessageHandlerCommandMixin, MessageHandler):
@@ -65,17 +65,17 @@ class StartHandler(MessageHandlerCommandMixin, MessageHandler):
                             media,
                             caption=start_message.text,
                             reply_markup=buttons,
-                            link_preview_options=False,
+                            disable_web_page_preview=True,
                         )
                     except TelegramBadRequest:
                         await self.event.answer(
                             start_message.text,
                             reply_markup=buttons,
-                            link_preview_options=False,
+                            disable_web_page_preview=True,
                         )
                 else:
                     await action(
                         start_message.text,
                         reply_markup=buttons,
-                        link_preview_options=False,
+                        disable_web_page_preview=True,
                     )
