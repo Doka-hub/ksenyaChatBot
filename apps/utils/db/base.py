@@ -84,14 +84,20 @@ class CRUDBase(metaclass=ABCMeta):
             instance_list = instance
 
         for instance in instance_list:
-            data = {}
+            data = {}            
             if isinstance(instance, int):
                 instance = cls.model.aio_get(cls.model.id == instance)
 
             for field, value in fields.items():
-                data[field] = value
+                setattr(instance, field, value)
 
-            await instance.update(data).aio_execute()
+            await instance.aio_save(only=fields.keys())
+
+#            data = {'id': instance.id}
+#            for field, value in fields.items():
+#                data[field] = value
+
+#            await cls.model.update(data).aio_execute()
 
     # SPECIFIC CRUD
     @classmethod

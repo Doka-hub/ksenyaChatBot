@@ -7,9 +7,7 @@ class RBDetailsCRUD(CRUDBase):
     fields = [
         'id',
 
-        'account_number',
-        'field_1',
-        'field_1',
+        'text',
     ]
     read_only_fields = fields
 
@@ -28,6 +26,7 @@ class PaymentCRUD(CRUDBase):
         'id',
 
         'user',
+        'channel',
         'stripe_id',
         'amount',
         'type',
@@ -35,6 +34,7 @@ class PaymentCRUD(CRUDBase):
         'screenshot',
 
         'paid_at',
+
         'is_paid',
     ]
     read_only_fields = ['id']

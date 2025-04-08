@@ -46,9 +46,22 @@ def decorator(func):
 
 
 @decorator
+def chat_member_register(
+    router: Router,
+    handler: type[BaseHandler],
+    *filters: Callable[..., Any],
+    flags: dict[str, Any] | None = None,
+    include_default_flags: bool = True,
+    states: list[State] | None = None,
+    **kwargs,
+):
+    router.chat_member.register(handler, *filters, flags=flags, **kwargs)
+
+
+@decorator
 def chat_join_request_register(
     router: Router,
-    handler: type(BaseHandler),
+    handler: type[BaseHandler],
     *filters: Callable[..., Any],
     flags: dict[str, Any] | None = None,
     include_default_flags: bool = True,
@@ -61,7 +74,7 @@ def chat_join_request_register(
 @decorator
 def message_register(
     router: Router,
-    handler: type(BaseHandler),
+    handler: type[BaseHandler],
     *filters: Callable[..., Any],
     flags: dict[str, Any] | None = None,
     include_default_flags: bool = True,
@@ -74,7 +87,7 @@ def message_register(
 @decorator
 def callback_query_register(
     router: Router,
-    handler: type(BaseHandler),
+    handler: type[BaseHandler],
     *filters: Callable[..., Any],
     flags: dict[str, Any] | None = None,
     include_default_flags: bool = True,

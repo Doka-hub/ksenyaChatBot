@@ -4,6 +4,7 @@ from aiogram.filters.callback_data import CallbackData
 from aiogram.handlers import (
     MessageHandler as AOMessageHandler,
     CallbackQueryHandler as AOCallbackQueryHandler,
+    ChatMemberHandler as AOChatMemberHandler,
 )
 
 from .mixins import (
@@ -18,6 +19,16 @@ class MessageHandler(
     GetUserHandlerMixin,
     BackHandlerMixin,
     AOMessageHandler,
+    metaclass=ABCMeta,
+):
+    pass
+
+
+class ChatMemberHandler(
+    StateHandlerMixin,
+    GetUserHandlerMixin,
+    BackHandlerMixin,
+    AOChatMemberHandler,
     metaclass=ABCMeta,
 ):
     pass

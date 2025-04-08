@@ -20,11 +20,12 @@ class Settings(BaseSettings):
     ADMINS_IDS: list[int] = []
     MANAGERS_IDS: list[int] = []
 
-    THROTTLE_TIME: ClassVar = 1
+    THROTTLE_TIME: ClassVar = 5
 
     # STRIPE
     STRIPE_SECRET_KEY: str
-    STRIPE_CHECKOUT_SESSION_WEBHOOK_SECRET_KEY: str
+    STRIPE_CHECKOUT_COMPLETED_WEBHOOK_SECRET_KEY: str
+    STRIPE_CHECKOUT_EXPIRED_WEBHOOK_SECRET_KEY: str
 
     # WEB
     BASE_HOST: str = 'localhost'

@@ -24,10 +24,7 @@ class DownloadExcelHandler(MessageHandlerCommandMixin, MessageHandler):
         for user in users:
             users_data['username'].append(user.username)
             users_data['email'].append(user.email)
-        # excel_file_path = f'media/excels/{request.user.id}'
-        # if not os.path.exists(excel_file_path):
-        #     os.makedirs(excel_file_path, exist_ok=True)
-        # excel_file_name = excel_file_path + f'{uuid4()}.xlsx'
+            
         bytesio = BytesIO()
         df = pd.DataFrame(users_data)
         with pd.ExcelWriter(bytesio, engine='xlsxwriter') as writer:

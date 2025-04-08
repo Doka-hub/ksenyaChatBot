@@ -1,19 +1,16 @@
-from aiohttp.client import ClientSession
+from aiohttp import ClientSession
 
-from main.celery import celery_app
+from main.celery import celery_app, celery_event_loop
 
 
-@celery_app.task(bind=True, max_retries=5, default_retry_delay=300)
-async def task_save_screenshot(self, payment_id: int, file_url: str):
-    async with ClientSession() as client:
-        response = await client.get(file_url)
-        file_bytes = await response.read()
-
-        response = await client.post(
-            'https://google.com', data={
-                'payment_id': str(payment_id),
-                'file_bytes': file_bytes,
-            },
+async def send_screenshot(payment_id: int, data):
+    async with ClientSession() as session:
+        await session.post(
+            f'http://admin:8001/payments/{payment_id}/upload-screenshot/',
+            data=data,
         )
-        if response.status != 200:
-            return self.retry()
+
+
+@celery_app.task()
+def task_send_screenshot(payment_id: int, data):
+    celery_event_loop.run_until_complete(send_screenshot(payment_id, data))

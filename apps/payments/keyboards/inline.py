@@ -10,7 +10,7 @@ def get_payment_choose_inline_keyboard() -> InlineKeyboardMarkup:
         [
             [
                 InlineKeyboardButton(
-                    text='Оплатить в ЕС',
+                    text='Оплатить картой зарубежного банка',
                     callback_data=PaymentCallbackData(type=PaymentType.EU).pack(),
                 ),
             ],

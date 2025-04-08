@@ -3,24 +3,49 @@ from typing import List, Iterable
 from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_application
 from aiohttp.web_app import Application
 
-from apps.web import web_app
 from apps.routers import router
 from apps.users.middlewares import GetUserMiddleware
 from apps.utils.middlewares import ThrottlingMiddleware
-from apps.utils.misc import logging, set_bot_commands
+from apps.utils.misc import logging
+from apps.web import web_app
 from .loader import settings, bot, dp
 
 
 async def on_startup(webhook_url):
-    print(webhook_url)
-    await bot.set_webhook(webhook_url)
+    old_webhook_url = await bot.get_webhook_info()
+    allowed_updates = [
+        'message',
+        'edited_message',
+        'channel_post',
+        'edited_channel_post',
+        'callback_query',
+        'inline_query',
+        'chosen_inline_result',
+        'shipping_query',
+        'pre_checkout_query',
+        'poll',
+        'poll_answer',
+        'my_chat_member',
+        'chat_member',
+    ]
+    print(old_webhook_url.url, webhook_url)
+    print(old_webhook_url.allowed_updates, allowed_updates)
+    if old_webhook_url.url != webhook_url or old_webhook_url.allowed_updates != allowed_updates:
+        await bot.delete_webhook(True)
+        await bot.set_webhook(
+            webhook_url,
+            allowed_updates=allowed_updates,
+        )
+    else:
+        print(f'Webhook already set {webhook_url}')
 
-    # Установка команд для бота
-    await set_bot_commands(bot)
+    # # Установка команд для бота
+    # print(444)
 
 
 def bot_setup():
     logging.setup()
+    print('Bot setup')
 
     dp['webhook_url'] = settings.WEBHOOK_URL
     dp.startup.register(on_startup)
@@ -51,7 +76,7 @@ def create_app():
         ('/api', web_app),
     ]
 
-    app.router.add_static('/bot-static', 'static')
+    #    app.router.add_static('/bot-static', 'static')
     for prefix, subapp in subapps:
         subapp['bot'] = bot
         subapp['dp'] = dp

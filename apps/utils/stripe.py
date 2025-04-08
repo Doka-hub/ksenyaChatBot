@@ -14,6 +14,7 @@ def create_checkout_session(
     quantity: int,
     name: str,
     metadata=None,
+    success_url: str = None,
     **kwargs,
 ) -> stripe.checkout.Session:
     session = _stripe.checkout.Session.create(
@@ -30,7 +31,7 @@ def create_checkout_session(
             }
         ],
         mode='payment',
-        success_url='https://google.com',
+        success_url=success_url,
         metadata=metadata,
         customer_email=kwargs.get('email'),
     )
@@ -40,9 +41,7 @@ def create_checkout_session(
 def get_webhook_construct_event(
     payload: dict,
     sig_header: str,
-    endpoint_secret_key: str = (
-            settings.STRIPE_CHECKOUT_SESSION_WEBHOOK_SECRET_KEY
-    ),
+    endpoint_secret_key: str,
 ):
     try:
         event = _stripe.Webhook.construct_event(

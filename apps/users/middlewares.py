@@ -19,9 +19,13 @@ class GetUserMiddleware(BaseMiddleware):
         if user.is_bot_blocked:
             await TGUserCRUD.bot_unblock(user)
 
+        user_data = {}
         for field in ['username', 'first_name', 'last_name']:
             if getattr(user, field) != getattr(event.from_user, field):
-                await TGUserCRUD.update(user, **{field: getattr(event.from_user, field)})
+                user_data[field] = getattr(event.from_user, field)
+
+        if user_data:
+            await TGUserCRUD.update(user, **user_data)
 
         data['user'] = user
         return await handler(event, data)

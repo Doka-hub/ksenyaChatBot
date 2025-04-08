@@ -1,12 +1,14 @@
 import re
 from datetime import datetime, timedelta
 
-from apps.payments.models import Payment
+from apps.channels.crud import ChannelCRUD
+from apps.payments.models import Payment, Subscription
 from .models import TGUser
 
 
 async def get_user_payments(user: TGUser):
-    paid_date = datetime.now() - timedelta(days=30)
+    channel = await ChannelCRUD.get_first()
+    paid_date = datetime.utcnow() - timedelta(days=channel.duration)
     user_payments = await Payment.filter(
         Payment.is_paid == True,
         Payment.paid_at >= paid_date,
@@ -17,6 +19,17 @@ async def get_user_payments(user: TGUser):
 
 async def is_user_paid(user: TGUser):
     return len(await get_user_payments(user)) >= 1
+
+
+async def get_user_active_subscriptions(user: TGUser):
+    return await Subscription.filter(
+        Subscription.user == user,
+        Subscription.active_by >= datetime.utcnow(),
+    ).aio_execute()
+
+
+async def have_user_active_subscription(user: TGUser):
+    return len(await get_user_active_subscriptions(user)) >= 1
 
 
 def is_valid_email(email: str) -> bool:
