@@ -1,11 +1,12 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from apps.channels.crud import ChannelCRUD
 from apps.channels.keyboards.inline import get_join_request_link_inline_keyboard
+from apps.notifications.schemas import NotifyUsers
 from apps.payments.crud import PaymentCRUD
 from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
 from apps.payments.models import Subscription
-from apps.payments.utils import create_subscription, have_user_active_subscription
+from apps.payments.utils import create_subscription
 from apps.users.models import Role, TGUser
 from main.celery import celery_app, celery_event_loop
 from main.loader import bot
@@ -84,3 +85,22 @@ async def remove_user_from_channel(subscription_id: int):
 @celery_app.task()
 def task_remove_user_from_channel(subscription_id: int):
     celery_event_loop.run_until_complete(remove_user_from_channel(subscription_id))
+
+
+async def notify(notify_users_data):
+    data = {}
+    notify_users_data = NotifyUsers(**notify_users_data)
+
+    notification_id = notify_users_data.notification_id
+    message = notify_users_data.message
+
+    for user_id, tg_user_id in notify_users_data.users_ids:
+        sent = await send_message(tg_user_id, message=message)
+        if sent:
+            now = datetime.now()
+            data[int(user_id)] = now
+
+
+@celery_app.task()
+def task_notify(notify_users_data: dict):
+    celery_event_loop.run_until_complete(notify(notify_users_data))

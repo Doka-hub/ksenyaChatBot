@@ -41,7 +41,6 @@ class BaseNotifyUsers(BaseModel):
 class NotifyUsers(BaseNotifyUsers):
     users_ids: list[tuple[UserID, TGUserID]] | None
     notification_id: int | None
-    image: ImageURL | ImageBytes | None
 
 
 class PaymentNotifyUser(BaseNotifyUsers):
