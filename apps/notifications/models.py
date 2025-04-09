@@ -15,6 +15,7 @@ class Notification(BaseModel):
     text = peewee.TextField()
 
     send_separately = peewee.BooleanField(default=False)
+    filters = peewee.CharField(max_length=255)
     send_all = peewee.BooleanField(default=False)
 
     created = peewee.DateTimeField(default=datetime.now)
