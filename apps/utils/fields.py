@@ -19,7 +19,7 @@ class FileField(peewee.CharField):
         return Path(value) if value else None
 
     def save_file(self, instance, filepath):
-        filepath = Path('media/', self.upload_to) / filename
+        filepath = Path('media/', self.upload_to) / filepath
         setattr(instance, self.name, filepath)
         return filepath
 

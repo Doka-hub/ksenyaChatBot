@@ -93,9 +93,10 @@ async def notify(notify_users_data):
 
     notification_id = notify_users_data.notification_id
     message = notify_users_data.message
+    image = notify_users_data.image
 
     for user_id, tg_user_id in notify_users_data.users_ids:
-        sent = await send_message(tg_user_id, message=message)
+        sent = await send_message(tg_user_id, message=message, image_id=image)
         if sent:
             now = datetime.now()
             data[int(user_id)] = now
