@@ -49,7 +49,7 @@ class NotifyButton(BaseModel):
 class NotifyUsers(BaseNotifyUsers):
     users_ids: list[tuple[UserID, TGUserID]] | None
     notification_id: int | None = None
-    image: list[NotifyImage] | None = None
+    images: list[NotifyImage] | None = None
     buttons: list[NotifyButton] | None = None
 
 

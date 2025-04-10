@@ -9,6 +9,8 @@ from aiogram.exceptions import (
 from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InputFile
 from loguru import logger
 
+from apps.notifications.crud import UsersNotificationsCRUD
+from apps.notifications.models import UsersNotifications
 from apps.users.crud import TGUserCRUD
 from main.loader import bot
 
@@ -63,7 +65,7 @@ async def send_message(
             message = make_text(title, text)
 
         if image_id:
-            await bot.send_photo(
+            await bot.send_media_group(
                 to,
                 image_id,
                 caption=message,
@@ -122,3 +124,19 @@ async def send_message(
     except TelegramBadRequest as e:
         logger.info('TelegramBadRequest: {e}', e=e)
     return False
+
+
+async def notify_statistic(notification_id: int, data: dict):
+    delivered_users_ids = list(data.keys())
+
+    users_notifications: list[UsersNotifications] = await UsersNotificationsCRUD.list(
+        UsersNotifications.notification_id == notification_id,
+        UsersNotifications.user_id.in_(delivered_users_ids),
+    )
+    for user_notification in users_notifications:
+        delivered_time = data[user_notification.user.id]
+        await UsersNotificationsCRUD.update(
+            user_notification,
+            delivered_time=delivered_time,
+            delivered=True,
+        )

@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from aiogram.utils.keyboard import InlineKeyboardButton
+
 from apps.channels.crud import ChannelCRUD
 from apps.channels.keyboards.inline import get_join_request_link_inline_keyboard
 from apps.notifications.schemas import NotifyUsers
@@ -8,9 +10,10 @@ from apps.payments.keyboards.inline import get_payment_choose_inline_keyboard
 from apps.payments.models import Subscription
 from apps.payments.utils import create_subscription
 from apps.users.models import Role, TGUser
+from apps.utils.keyboards import get_inline_keyboard
 from main.celery import celery_app, celery_event_loop
 from main.loader import bot
-from .utils import send_message
+from .utils import send_message, notify_statistic
 
 
 async def notify_managers(payment_id: int):
@@ -93,13 +96,30 @@ async def notify(notify_users_data):
 
     notification_id = notify_users_data.notification_id
     message = notify_users_data.message
-    image = notify_users_data.image
+    images = notify_users_data.images
+    buttons = notify_users_data.buttons
+
+    inline_buttons = []
+    for button in buttons:
+        inline_buttons.append(InlineKeyboardButton(text=button.name, url=button.url))
+    if inline_buttons:
+        inline_keyboard = get_inline_keyboard([inline_buttons])
+    else:
+        inline_keyboard = None
 
     for user_id, tg_user_id in notify_users_data.users_ids:
-        sent = await send_message(tg_user_id, message=message, image_id=image)
+        sent = await send_message(
+            tg_user_id,
+            message=message,
+            image_id=images,
+            reply_markup=inline_keyboard,
+        )
         if sent:
             now = datetime.now()
             data[int(user_id)] = now
+
+    if notification_id:
+        await notify_statistic(notification_id, data)
 
 
 @celery_app.task()
