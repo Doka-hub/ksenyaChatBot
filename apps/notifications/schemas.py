@@ -3,7 +3,6 @@ from typing import TypeVar
 
 from pydantic import BaseModel
 
-
 T = TypeVar('T', bound=Enum)
 ImageURL = TypeVar('ImageURL', bound=str)
 ImageBytes = TypeVar('ImageBytes', bound=bytes)
@@ -38,10 +37,20 @@ class BaseNotifyUsers(BaseModel):
         use_enum_values = True
 
 
+class NotifyImage(BaseModel):
+    image: ImageURL | ImageBytes | None = None
+
+
+class NotifyButton(BaseModel):
+    name: str
+    url: str | None = None
+
+
 class NotifyUsers(BaseNotifyUsers):
     users_ids: list[tuple[UserID, TGUserID]] | None
-    notification_id: int | None
-    image: ImageURL | ImageBytes | None
+    notification_id: int | None = None
+    image: list[NotifyImage] | None = None
+    buttons: list[NotifyButton] | None = None
 
 
 class PaymentNotifyUser(BaseNotifyUsers):
