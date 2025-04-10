@@ -27,7 +27,6 @@ async def send_message(
     image_id: str | None = None,
     video_id: str | None = None,
     document: InputFile = None,
-    parse_mode: str | None = 'html',
     reply_markup: InlineKeyboardMarkup | ReplyKeyboardMarkup | None = None,
     disable_notification: bool = False,
     tries: int = 0,
@@ -41,7 +40,6 @@ async def send_message(
     :param image_id:
     :param video_id:
     :param document:
-    :param parse_mode:
     :param reply_markup:
     :param disable_notification: отключаем звук
     :param tries: `n` совершенные попытки
@@ -69,7 +67,6 @@ async def send_message(
                 to,
                 image_id,
                 caption=message,
-                parse_mode=parse_mode,
                 reply_markup=reply_markup,
                 disable_notification=disable_notification,
             )
@@ -78,7 +75,6 @@ async def send_message(
                 to,
                 video_id,
                 caption=message,
-                parse_mode=parse_mode,
                 reply_markup=reply_markup,
                 disable_notification=disable_notification,
             )
@@ -93,7 +89,6 @@ async def send_message(
             await bot.send_message(
                 to,
                 message,
-                parse_mode=parse_mode,
                 reply_markup=reply_markup,
                 disable_notification=disable_notification,
             )
@@ -109,7 +104,6 @@ async def send_message(
             image_id,
             video_id,
             document,
-            parse_mode,
             reply_markup,
             disable_notification,
             tries + 1,
