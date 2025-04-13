@@ -6,7 +6,7 @@ from aiogram.exceptions import (
     TelegramUnauthorizedError,
     TelegramBadRequest,
 )
-from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InputFile
+from aiogram.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InputFile, InputMediaPhoto
 from loguru import logger
 
 from apps.notifications.crud import UsersNotificationsCRUD
@@ -65,7 +65,7 @@ async def send_message(
         if image_id:
             await bot.send_media_group(
                 to,
-                image_id,
+                [InputMediaPhoto(media=image) for image in image_id],
                 caption=message,
                 reply_markup=reply_markup,
                 disable_notification=disable_notification,
