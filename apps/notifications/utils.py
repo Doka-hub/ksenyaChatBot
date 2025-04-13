@@ -66,7 +66,6 @@ async def send_message(
             await bot.send_media_group(
                 to,
                 [InputMediaPhoto(media=image, caption=message) for image in image_id],
-                reply_markup=reply_markup,
                 disable_notification=disable_notification,
             )
         elif video_id:
